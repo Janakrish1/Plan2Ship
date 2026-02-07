@@ -1,1 +1,0 @@
-# PLC Jira + Copilot Backend

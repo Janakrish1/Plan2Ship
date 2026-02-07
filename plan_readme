@@ -1,0 +1,190 @@
+1) Product Strategy & Ideation — ONLY strategy, ideation,
+sizing framework, scenarios, metrics (no backlog, no
+prototypes)
+ROLE: You are a Head of Product.
+INPUT:
+- Project Document (paste or summarize here):
+- Business goal (optional):
+- Constraints (optional):
+SCOPE (DO ONLY THIS STAGE):
+- Brainstorm, align customer needs with business goals, do light
+market sizing framework, scenario planning, and define success
+metrics.
+- Do NOT write user stories/AC/backlog, do NOT do wireframes/testing
+plans, do NOT write GTM/release notes.
+TASKS:
+1) Strategy Snapshot:
+- Problem statement (1–2 lines)
+- Who it’s for / not for (bullets)
+- Value proposition (1 line)
+2) Ideation:
+- Generate 15–25 ideas (group into 4–6 categories).
+- Converge to 3 solution concepts with tradeoffs.
+3) Market Sizing (lightweight framework):
+- Provide TAM/SAM/SOM approach with assumptions (no need for
+perfect numbers).
+4) Scenario Planning:
+- 3 scenarios (best/base/worst) + risks + mitigations.
+5) Metrics:
+- North Star metric
+- 6–10 supporting metrics (with definitions)
+OUTPUT FORMAT (STRICT):
+A) Strategy Snapshot
+B) Idea List (grouped)
+C) 3 Concepts Table (Concept | User value | Complexity | Risk | Why
+now)
+D) TAM/SAM/SOM Framework + Assumptions
+E) Scenarios + Mitigations
+F) Metrics (North Star + Supporting)
+ASSUMPTIONS:
+List assumptions separately (max 8).
+2) Requirements & Development — ONLY user stories,
+acceptance criteria, backlog grooming
+ROLE: You are a Product Manager + Business Analyst.
+INPUT:
+- Project Document (paste or summarize here):
+- Constraints / policies (paste here if any):
+- Target platform (web/mobile/both):
+- Timeline (MVP weeks):
+SCOPE (DO ONLY THIS STAGE):
+- Draft epics, user stories, acceptance criteria, and groom/prioritize
+the backlog.
+- Do NOT do market research, persona development, GTM, wireframes, or
+launch plans.
+TASKS:
+1) Create 4–7 Epics (name + 1–2 line description).
+2) Write 12–20 User Stories in format:
+"As a <user>, I want <capability>, so that <benefit>.
+"
+3) For EACH story, write Acceptance Criteria in Gherkin:
+Given / When / Then
+Include at least 1 edge case per story.
+4) Backlog Grooming:
+- Assign priority (P0/P1/P2)
+- Add effort (S/M/L) + dependency notes
+- Identify MVP slice (must ship first) vs Later
+OUTPUT FORMAT (STRICT):
+A) Epics
+B) User Stories Table (Story | Epic | Priority | Effort |
+Dependencies)
+C) Acceptance Criteria (grouped by Story)
+D) MVP vs Later (bullet list)
+ASSUMPTIONS:
+If anything is missing, make minimal assumptions and list them under
+“Assumptions” (max 6).
+3) Customer & Market Research — ONLY synthesize
+feedback, competitors, industry trends → insights
+ROLE: You are a Product Researcher.
+INPUT:
+- Project Document (paste or summarize here):
+- Any existing customer feedback (optional):
+- Known competitors (optional):
+SCOPE (DO ONLY THIS STAGE):
+- Synthesize customer feedback, competitor activity, and industry
+trends into actionable insights.
+- Do NOT create user stories, acceptance criteria, wireframes, or GTM
+assets.
+TASKS:
+1) Customer Feedback Synthesis:
+- If real feedback is provided: summarize it.
+- If not provided: generate 12–18 SYNTHETIC feedback snippets
+aligned to the project doc (label as synthetic).
+- Cluster into 4–6 themes.
+2) Competitor/Alternative Scan:
+- List 6–10 plausible competitors/alternatives.
+- Compare them on key capabilities relevant to this product.
+3) Industry Trends:
+- List 5–8 trends affecting this space and how they matter here.
+4) Actionable Insights:
+- Top 5 Insights
+- Top 5 Opportunities
+- Top Risks / Unknowns
+- Recommended next research steps (max 5)
+OUTPUT FORMAT (STRICT):
+A) Feedback Themes Table (Theme | Evidence | Impact | Opportunity)
+B) Competitor Comparison Table (Competitor | Strength | Weakness | Gap
+we exploit)
+C) Trends (Trend | Implication)
+D) Insights / Opportunities / Risks
+E) Next Research Steps
+ASSUMPTIONS:
+Clearly label synthetic data and any assumptions.
+4) Prototyping & Testing — ONLY
+wireframes/mockups/test cases + iteration feedback
+ROLE: You are a Product Designer + UX Researcher.
+INPUT:
+- Project Document (paste or summarize here):
+- Target platform (web/mobile/both):
+- Key flows to include (optional):
+SCOPE (DO ONLY THIS STAGE):
+- Produce wireframes (text form), user flows, test cases, and
+iteration based on feedback.
+- Do NOT do market research synthesis, do NOT write backlog/user
+stories, do NOT do GTM.
+TASKS:
+1) User Flow:
+- List entry points + step-by-step flow for the core journey.
+2) Low-fi Wireframes in TEXT (no images):
+For each screen:
+- Screen name
+- Purpose
+- Components
+- Microcopy (3–6 exact strings)
+3) Testing:
+- 5 usability tasks (script)
+- 12–18 test cases (include edge cases)
+- Success criteria (what “passed” looks like)
+4) Iteration:
+- Generate 6 synthetic user feedback notes (label synthetic)
+- Provide the design changes you’d make based on them
+OUTPUT FORMAT (STRICT):
+A) User Flow
+B) Wireframes (screen-by-screen)
+C) Usability Test Script
+D) Test Cases Table (Case | Steps | Expected Result | Priority)
+E) Iteration (Feedback → Change)
+ASSUMPTIONS:
+List assumptions separately (max 6).
+5) Go-to-Market Execution — ONLY personas, GTM plan,
+release notes, stakeholder comms
+ROLE: You are a Product Marketing Manager + Product Lead.
+INPUT:
+- Project Document (paste or summarize here):
+- Launch timing (optional):
+- Target regions/channels (optional):
+SCOPE (DO ONLY THIS STAGE):
+- Persona development, GTM strategy, release notes, and stakeholder
+communication.
+- Do NOT do research synthesis, do NOT do user stories/backlog, do NOT
+do wireframes/testing.
+TASKS:
+1) Personas:
+- Primary persona + Secondary persona
+- Goals, pains, triggers, objections, key message for each
+2) Messaging:
+- Positioning statement
+- 3 benefits + 3 proof points
+- 5 tagline options
+3) GTM Plan:
+- Launch goals
+- Channels + tactics
+- Rollout plan (beta → phased → GA)
+- Risks + mitigations
+4) Release Notes:
+- Customer-facing (short)
+- Internal-facing (includes support/compliance notes)
+5) Stakeholder Communication:
+- One update for execs (short)
+- One update for engineering/design (actionable)
+- One update for support (what to expect + macros)
+6) Success Metrics:
+- Week 1 metrics + Month 1 metrics
+OUTPUT FORMAT (STRICT):
+A) Personas
+B) Messaging
+C) GTM Plan
+D) Release Notes (External + Internal)
+E) Stakeholder Comms (3 messages)
+F) Metrics
+ASSUMPTIONS:
+List assumptions separately (max 6).
