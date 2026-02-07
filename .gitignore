@@ -1,0 +1,29 @@
+# Env and secrets
+.env
+.env.local
+.env.*.local
+
+docs/   
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.eggs/
+
+# SQLite DB (optional, so you don't commit local data)
+*.db
+plc_jira.db
+
+# Node
+node_modules/
+.next/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
