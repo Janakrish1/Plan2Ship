@@ -31,7 +31,7 @@ export interface Stage3Analysis {
 
 export interface Stage4Analysis {
   userFlow?: { entryPoints?: string[]; steps?: string[]; description?: string };
-  wireframes?: { screenName: string; purpose: string; components: string[]; microcopy: string[] }[];
+  wireframes?: { screenName: string; purpose: string; components: string[]; microcopy: string[]; imagePath?: string }[];
   usabilityTestScript?: string | { task: string; script: string }[];
   testCases?: { case: string; steps: string; expectedResult: string; priority: string }[];
   iteration?: { feedback: string; change: string }[];
@@ -50,6 +50,13 @@ export interface Stage5Analysis {
   raw?: string;
 }
 
+export interface MetricsCharts {
+  stage1?: string[];
+  stage2?: string[];
+  stage3?: string[];
+  stage5?: string[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -64,6 +71,7 @@ export interface Project {
   stage4Analysis?: Stage4Analysis;
   stage5Analysis?: Stage5Analysis;
   thumbnail?: string;
+  metricsCharts?: MetricsCharts;
 }
 
 export interface CreateProjectResponse {

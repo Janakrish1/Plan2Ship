@@ -138,21 +138,29 @@ export function ProjectDetailPage() {
           data={project.stage2Analysis}
           onGenerate={() => handleGenerateStage(2)}
           isGenerating={generatingStage === 2}
+          projectId={id}
+          metricsCharts={project.metricsCharts}
         />
         <Stage3Analysis
           data={project.stage3Analysis}
           onGenerate={() => handleGenerateStage(3)}
           isGenerating={generatingStage === 3}
+          projectId={id}
+          metricsCharts={project.metricsCharts}
         />
         <Stage4Analysis
           data={project.stage4Analysis}
           onGenerate={() => handleGenerateStage(4)}
           isGenerating={generatingStage === 4}
+          projectId={id}
+          onProjectUpdate={setProject}
         />
         <Stage5Analysis
           data={project.stage5Analysis}
           onGenerate={() => handleGenerateStage(5)}
           isGenerating={generatingStage === 5}
+          projectId={id}
+          metricsCharts={project.metricsCharts}
         />
       </div>
     </div>

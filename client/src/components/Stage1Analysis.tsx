@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Project, Stage1Analysis as Stage1AnalysisType } from '../types/project';
+import { getMetricsChartUrl } from '../services/api';
 
 interface Stage1AnalysisProps {
   project: Project;
@@ -115,6 +116,22 @@ export function Stage1Analysis({ project, onSave, onBrainstorm }: Stage1Analysis
               {analysis.competitiveInsights || 'None.'}
             </p>
           </Section>
+          {project.metricsCharts?.stage1?.length ? (
+            <Section title="Market & strategy metrics">
+              <p className="text-gray-600 text-sm mb-3">Charts from market sizing and scenario analysis.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {project.metricsCharts.stage1.map((filename) => (
+                  <figure key={filename} className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                    <img
+                      src={getMetricsChartUrl(project.id, filename)}
+                      alt={filename.replace('.png', '').replace(/-/g, ' ')}
+                      className="w-full h-auto"
+                    />
+                  </figure>
+                ))}
+              </div>
+            </Section>
+          ) : null}
         </>
       )}
 

@@ -1,10 +1,13 @@
-import type { Stage2Analysis as Stage2Type } from '../types/project';
+import type { Stage2Analysis as Stage2Type, MetricsCharts } from '../types/project';
 import { StageSection } from './StageSection';
+import { getMetricsChartUrl } from '../services/api';
 
 interface Stage2AnalysisProps {
   data: Stage2Type | undefined;
   onGenerate: () => Promise<void>;
   isGenerating: boolean;
+  projectId?: string;
+  metricsCharts?: MetricsCharts;
 }
 
 function Table({ headers, rows }: { headers: string[]; rows: (string | undefined)[][] }) {
@@ -36,7 +39,7 @@ function Table({ headers, rows }: { headers: string[]; rows: (string | undefined
   );
 }
 
-export function Stage2Analysis({ data, onGenerate, isGenerating }: Stage2AnalysisProps) {
+export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts }: Stage2AnalysisProps) {
   if (!data) {
     return (
       <StageSection stageNumber={2} title="Requirements & Development">
@@ -125,6 +128,23 @@ export function Stage2Analysis({ data, onGenerate, isGenerating }: Stage2Analysi
                 <li key={i}>{a}</li>
               ))}
             </ul>
+          </div>
+        ) : null}
+        {projectId && metricsCharts?.stage2?.length ? (
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Backlog metrics</h4>
+            <p className="text-gray-600 text-sm mb-3">Priority, effort, and MVP vs Later distribution.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {metricsCharts.stage2.map((filename) => (
+                <figure key={filename} className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                  <img
+                    src={getMetricsChartUrl(projectId, filename)}
+                    alt={filename.replace('.png', '').replace(/-/g, ' ')}
+                    className="w-full h-auto"
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
         ) : null}
       </div>

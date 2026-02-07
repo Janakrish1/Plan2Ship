@@ -1,13 +1,16 @@
-import type { Stage5Analysis as Stage5Type } from '../types/project';
+import type { Stage5Analysis as Stage5Type, MetricsCharts } from '../types/project';
 import { StageSection } from './StageSection';
+import { getMetricsChartUrl } from '../services/api';
 
 interface Stage5AnalysisProps {
   data: Stage5Type | undefined;
   onGenerate: () => Promise<void>;
   isGenerating: boolean;
+  projectId?: string;
+  metricsCharts?: MetricsCharts;
 }
 
-export function Stage5Analysis({ data, onGenerate, isGenerating }: Stage5AnalysisProps) {
+export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts }: Stage5AnalysisProps) {
   if (!data) {
     return (
       <StageSection stageNumber={5} title="Go-to-Market Execution">
@@ -134,6 +137,23 @@ export function Stage5Analysis({ data, onGenerate, isGenerating }: Stage5Analysi
                 </ul>
               </div>
             ) : null}
+          </div>
+        ) : null}
+        {projectId && metricsCharts?.stage5?.length ? (
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">GTM metrics (charts)</h4>
+            <p className="text-gray-600 text-sm mb-3">Persona mix and success metrics distribution.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {metricsCharts.stage5.map((filename) => (
+                <figure key={filename} className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                  <img
+                    src={getMetricsChartUrl(projectId, filename)}
+                    alt={filename.replace('.png', '').replace(/-/g, ' ')}
+                    className="w-full h-auto"
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
         ) : null}
       </div>

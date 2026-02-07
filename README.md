@@ -28,7 +28,18 @@ AI-powered Product Lifecycle Management for Product Managers. Stage 1 implements
    - `AZURE_OPENAI_DEPLOYMENT` (e.g. `gpt-5.1-chat`)
    - `AZURE_OPENAI_API_VERSION` (e.g. `2024-12-01-preview`)
 
-3. **Run**
+3. **Metrics charts (optional)**
+
+   Stage metrics (graphs, pie charts) are generated with Python (matplotlib + seaborn). To enable them:
+
+   ```bash
+   cd server/scripts
+   pip install -r requirements-metrics.txt
+   ```
+
+   Ensure `python3` is on your PATH. Charts are generated automatically when you create a project (Stage 1) or run Stage 2, 3, or 5 analysis, and appear in the relevant stage sections.
+
+4. **Run**
 
    From the project root:
 
@@ -51,8 +62,9 @@ AI-powered Product Lifecycle Management for Product Managers. Stage 1 implements
 ## Usage
 
 1. **Home** – List projects and open “Add Project”.
-2. **Create project** – Upload a product PDF (max 15 MB). The server parses the PDF and calls Azure OpenAI for Stage 1 analysis.
+2. **Create project** – Upload a product PDF (max 15 MB). The server parses the PDF and calls Azure OpenAI for Stage 1 analysis. If Python metrics are set up, Stage 1 charts (market sizing, customer segments, scenarios) are generated.
 3. **Project detail** – View/edit title, summary, and Stage 1 sections (ideas, market sizing, segments, goals, scenarios, needs, competitive insights). Use **Brainstorm more** for extra ideas and **Save** to persist.
+4. **Stages 2–5** – Generate analysis per stage. Stages 2, 3, and 5 get metrics charts (backlog priority/effort, feedback themes/competitors/trends, personas/GTM metrics) when Python is configured.
 
 ## API
 

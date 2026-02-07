@@ -1,13 +1,16 @@
-import type { Stage3Analysis as Stage3Type } from '../types/project';
+import type { Stage3Analysis as Stage3Type, MetricsCharts } from '../types/project';
 import { StageSection } from './StageSection';
+import { getMetricsChartUrl } from '../services/api';
 
 interface Stage3AnalysisProps {
   data: Stage3Type | undefined;
   onGenerate: () => Promise<void>;
   isGenerating: boolean;
+  projectId?: string;
+  metricsCharts?: MetricsCharts;
 }
 
-export function Stage3Analysis({ data, onGenerate, isGenerating }: Stage3AnalysisProps) {
+export function Stage3Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts }: Stage3AnalysisProps) {
   if (!data) {
     return (
       <StageSection stageNumber={3} title="Customer & Market Research">
@@ -138,6 +141,23 @@ export function Stage3Analysis({ data, onGenerate, isGenerating }: Stage3Analysi
                 <li key={i}>{s}</li>
               ))}
             </ul>
+          </div>
+        ) : null}
+        {projectId && metricsCharts?.stage3?.length ? (
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Market research metrics</h4>
+            <p className="text-gray-600 text-sm mb-3">Feedback themes, competitor comparison, and industry trends.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {metricsCharts.stage3.map((filename) => (
+                <figure key={filename} className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                  <img
+                    src={getMetricsChartUrl(projectId, filename)}
+                    alt={filename.replace('.png', '').replace(/-/g, ' ')}
+                    className="w-full h-auto"
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
         ) : null}
       </div>

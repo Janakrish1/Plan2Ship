@@ -1,13 +1,38 @@
-import type { Stage4Analysis as Stage4Type } from '../types/project';
+import { useState } from 'react';
+import type { Stage4Analysis as Stage4Type, Project } from '../types/project';
 import { StageSection } from './StageSection';
+import { generateWireframeImage, getWireframeImageUrl } from '../services/api';
 
 interface Stage4AnalysisProps {
   data: Stage4Type | undefined;
   onGenerate: () => Promise<void>;
   isGenerating: boolean;
+  projectId?: string;
+  onProjectUpdate?: (project: Project) => void;
 }
 
-export function Stage4Analysis({ data, onGenerate, isGenerating }: Stage4AnalysisProps) {
+export function Stage4Analysis({
+  data,
+  onGenerate,
+  isGenerating,
+  projectId,
+  onProjectUpdate,
+}: Stage4AnalysisProps) {
+  const [generatingImageIndex, setGeneratingImageIndex] = useState<number | null>(null);
+
+  const handleGenerateMockup = async (index: number) => {
+    if (!projectId || !onProjectUpdate) return;
+    setGeneratingImageIndex(index);
+    try {
+      const updated = await generateWireframeImage(projectId, index);
+      onProjectUpdate(updated);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Mockup generation failed');
+    } finally {
+      setGeneratingImageIndex(null);
+    }
+  };
+
   if (!data) {
     return (
       <StageSection stageNumber={4} title="Prototyping & Testing">
@@ -59,7 +84,7 @@ export function Stage4Analysis({ data, onGenerate, isGenerating }: Stage4Analysi
         ) : null}
         {data.wireframes?.length ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Wireframes (text)</h4>
+            <h4 className="font-medium text-gray-900 mb-2">Wireframes & mockups</h4>
             <div className="space-y-4">
               {data.wireframes.map((w, i) => (
                 <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
@@ -76,6 +101,36 @@ export function Stage4Analysis({ data, onGenerate, isGenerating }: Stage4Analysi
                         <li key={j}>{m}</li>
                       ))}
                     </ul>
+                  ) : null}
+                  {projectId && onProjectUpdate ? (
+                    <div className="mt-4">
+                      {w.imagePath ? (
+                        <div className="mt-2">
+                          <img
+                            src={getWireframeImageUrl(projectId, w.imagePath)}
+                            alt={`Mockup: ${w.screenName}`}
+                            className="max-w-full rounded-lg border border-gray-200 shadow-sm max-h-96 object-contain"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleGenerateMockup(i)}
+                            disabled={generatingImageIndex !== null}
+                            className="mt-2 text-sm text-primary-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {generatingImageIndex === i ? 'Regenerating…' : 'Regenerate mockup'}
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleGenerateMockup(i)}
+                          disabled={generatingImageIndex !== null}
+                          className="px-3 py-2 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {generatingImageIndex === i ? 'Generating…' : 'Generate mockup (AI image)'}
+                        </button>
+                      )}
+                    </div>
                   ) : null}
                 </div>
               ))}

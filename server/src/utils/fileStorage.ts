@@ -16,6 +16,36 @@ export function getProjectUploadDir(projectId: string): string {
   return path.join(UPLOADS_DIR, projectId);
 }
 
+export function getProjectWireframesDir(projectId: string): string {
+  return path.join(UPLOADS_DIR, projectId, 'wireframes');
+}
+
+export function getProjectMetricsDir(projectId: string): string {
+  return path.join(UPLOADS_DIR, projectId, 'metrics');
+}
+
+export function getMetricsChartPath(projectId: string, filename: string): string {
+  return path.join(getProjectMetricsDir(projectId), filename);
+}
+
+export async function saveWireframeImage(
+  projectId: string,
+  index: number,
+  buffer: Buffer
+): Promise<string> {
+  await ensureDirectories();
+  const dir = getProjectWireframesDir(projectId);
+  await fs.mkdir(dir, { recursive: true });
+  const filename = `screen-${index}-${Date.now()}.png`;
+  const filePath = path.join(dir, filename);
+  await fs.writeFile(filePath, buffer);
+  return `wireframes/${filename}`;
+}
+
+export function getWireframeImagePath(projectId: string, relativePath: string): string {
+  return path.join(getProjectUploadDir(projectId), relativePath);
+}
+
 export async function saveProjectFile(
   projectId: string,
   filename: string,

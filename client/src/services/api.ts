@@ -91,3 +91,23 @@ export async function runStageAnalysis(
     body: { stage, options },
   });
 }
+
+export async function generateWireframeImage(
+  projectId: string,
+  wireframeIndex: number
+): Promise<Project> {
+  const res = await request<{ imagePath: string; project: Project }>(
+    `/projects/${projectId}/wireframe-image`,
+    { method: 'POST', body: { wireframeIndex } }
+  );
+  return res.project;
+}
+
+export function getWireframeImageUrl(projectId: string, imagePath: string): string {
+  const filename = imagePath.replace(/^wireframes\//, '');
+  return `/api/projects/${projectId}/wireframe-image/${filename}`;
+}
+
+export function getMetricsChartUrl(projectId: string, filename: string): string {
+  return `${API_BASE}/projects/${projectId}/metrics-chart/${filename}`;
+}

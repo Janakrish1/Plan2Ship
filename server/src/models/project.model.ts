@@ -34,7 +34,7 @@ export interface Stage3Analysis {
 /** Stage 4: Prototyping & Testing */
 export interface Stage4Analysis {
   userFlow?: { entryPoints?: string[]; steps?: string[]; description?: string };
-  wireframes?: { screenName: string; purpose: string; components: string[]; microcopy: string[] }[];
+  wireframes?: { screenName: string; purpose: string; components: string[]; microcopy: string[]; imagePath?: string }[];
   usabilityTestScript?: string | { task: string; script: string }[];
   testCases?: { case: string; steps: string; expectedResult: string; priority: string }[];
   iteration?: { feedback: string; change: string }[];
@@ -54,6 +54,14 @@ export interface Stage5Analysis {
   raw?: string;
 }
 
+/** Chart image filenames generated per stage (e.g. stage1-market-sizing.png) */
+export interface MetricsCharts {
+  stage1?: string[];
+  stage2?: string[];
+  stage3?: string[];
+  stage5?: string[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -68,6 +76,8 @@ export interface Project {
   stage4Analysis?: Stage4Analysis;
   stage5Analysis?: Stage5Analysis;
   thumbnail?: string;
+  /** Metrics chart images per stage (matplotlib/seaborn) */
+  metricsCharts?: MetricsCharts;
 }
 
 export interface AnalysisResult {
