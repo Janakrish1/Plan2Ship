@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { DocumentUpload } from '../components/DocumentUpload';
-import { createProject } from '../services/api';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DocumentUpload } from "../components/DocumentUpload";
+import { createProject } from "../services/api";
 
 export function CreateProjectPage() {
   const navigate = useNavigate();
@@ -15,25 +15,29 @@ export function CreateProjectPage() {
       const { id } = await createProject(file);
       navigate(`/project/${id}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload failed');
+      setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
       setIsUploading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">Create project</h2>
-      <p className="text-gray-600 mb-6">
-        Upload a product document (PDF) to run Stage 1: Product Strategy & Ideation analysis.
-      </p>
-      <DocumentUpload
-        onUpload={handleUpload}
-        isUploading={isUploading}
-        disabled={isUploading}
-      />
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-display font-bold text-white mb-2">Create project</h1>
+        <p className="text-muted-foreground">
+          Upload a product document (PDF) to run Stage 1: Product Strategy & Ideation analysis.
+        </p>
+      </div>
+      <div className="glass-panel rounded-2xl p-8">
+        <DocumentUpload
+          onUpload={handleUpload}
+          isUploading={isUploading}
+          disabled={isUploading}
+        />
+      </div>
       {error && (
-        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-red-700">
+        <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-4 text-destructive">
           {error}
         </div>
       )}

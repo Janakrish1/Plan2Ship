@@ -14,14 +14,14 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
   if (!data) {
     return (
       <StageSection stageNumber={5} title="Go-to-Market Execution">
-        <p className="text-gray-600 text-sm mb-4">
+        <p className="text-muted-foreground text-sm mb-4">
           Personas, messaging, GTM plan, release notes, and stakeholder comms.
         </p>
         <button
           type="button"
           onClick={onGenerate}
           disabled={isGenerating}
-          className="px-4 py-2 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-50"
         >
           {isGenerating ? 'Generating…' : 'Generate Stage 5'}
         </button>
@@ -34,13 +34,13 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
       <div className="space-y-6">
         {data.personas?.length ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Personas</h4>
+            <h4 className="font-medium text-foreground mb-2">Personas</h4>
             <div className="space-y-4">
               {data.personas.map((p, i) => (
-                <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <div className="font-medium text-gray-800 capitalize">{p.type}</div>
-                  {p.name && <p className="text-gray-600 text-sm">{p.name}</p>}
-                  {p.keyMessage && <p className="text-primary-700 text-sm mt-1">Key message: {p.keyMessage}</p>}
+                <div key={i} className="border border-white/10 rounded-lg p-4 bg-card/40">
+                  <div className="font-medium text-foreground capitalize">{p.type}</div>
+                  {p.name && <p className="text-muted-foreground text-sm">{p.name}</p>}
+                  {p.keyMessage && <p className="text-primary text-sm mt-1">Key message: {p.keyMessage}</p>}
                   {p.goals?.length ? <p className="text-sm mt-2"><span className="font-medium">Goals:</span> {p.goals.join('; ')}</p> : null}
                   {p.pains?.length ? <p className="text-sm"><span className="font-medium">Pains:</span> {p.pains.join('; ')}</p> : null}
                   {p.objections?.length ? <p className="text-sm"><span className="font-medium">Objections:</span> {p.objections.join('; ')}</p> : null}
@@ -51,9 +51,9 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {data.messaging ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Messaging</h4>
+            <h4 className="font-medium text-foreground mb-2">Messaging</h4>
             {data.messaging.positioningStatement && (
-              <p className="text-gray-700 italic mb-2">"{data.messaging.positioningStatement}"</p>
+              <p className="text-foreground italic mb-2">"{data.messaging.positioningStatement}"</p>
             )}
             {data.messaging.benefits?.length ? (
               <p className="text-sm"><span className="font-medium">Benefits:</span> {data.messaging.benefits.join('; ')}</p>
@@ -68,8 +68,8 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {data.gtmPlan && Object.keys(data.gtmPlan).length ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">GTM Plan</h4>
-            <pre className="text-sm text-gray-700 bg-gray-50 p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
+            <h4 className="font-medium text-foreground mb-2">GTM Plan</h4>
+            <pre className="text-sm text-foreground bg-white/5 border border-white/10 p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
               {JSON.stringify(data.gtmPlan, null, 2)}
             </pre>
           </div>
@@ -78,38 +78,38 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {data.releaseNotes.customerFacing && (
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Release notes (customer)</h4>
-                <p className="text-gray-600 text-sm whitespace-pre-wrap">{data.releaseNotes.customerFacing}</p>
+                <h4 className="font-medium text-foreground mb-2">Release notes (customer)</h4>
+                <p className="text-muted-foreground text-sm whitespace-pre-wrap">{data.releaseNotes.customerFacing}</p>
               </div>
             )}
             {data.releaseNotes.internal && (
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Release notes (internal)</h4>
-                <p className="text-gray-600 text-sm whitespace-pre-wrap">{data.releaseNotes.internal}</p>
+                <h4 className="font-medium text-foreground mb-2">Release notes (internal)</h4>
+                <p className="text-muted-foreground text-sm whitespace-pre-wrap">{data.releaseNotes.internal}</p>
               </div>
             )}
           </div>
         ) : null}
         {data.stakeholderComms ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Stakeholder Communication</h4>
+            <h4 className="font-medium text-foreground mb-2">Stakeholder Communication</h4>
             <div className="space-y-3">
               {data.stakeholderComms.execs && (
                 <div>
-                  <span className="font-medium text-gray-700 text-sm">Execs:</span>
-                  <p className="text-gray-600 text-sm mt-0.5">{data.stakeholderComms.execs}</p>
+                  <span className="font-medium text-foreground text-sm">Execs:</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.execs}</p>
                 </div>
               )}
               {data.stakeholderComms.engineering && (
                 <div>
-                  <span className="font-medium text-gray-700 text-sm">Engineering/Design:</span>
-                  <p className="text-gray-600 text-sm mt-0.5">{data.stakeholderComms.engineering}</p>
+                  <span className="font-medium text-foreground text-sm">Engineering/Design:</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.engineering}</p>
                 </div>
               )}
               {data.stakeholderComms.support && (
                 <div>
-                  <span className="font-medium text-gray-700 text-sm">Support:</span>
-                  <p className="text-gray-600 text-sm mt-0.5">{data.stakeholderComms.support}</p>
+                  <span className="font-medium text-foreground text-sm">Support:</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.support}</p>
                 </div>
               )}
             </div>
@@ -119,8 +119,8 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {data.metrics.week1?.length ? (
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Week 1 metrics</h4>
-                <ul className="list-disc list-inside text-gray-600 text-sm">
+                <h4 className="font-medium text-foreground mb-2">Week 1 metrics</h4>
+                <ul className="list-disc list-inside text-muted-foreground text-sm">
                   {data.metrics.week1.map((m, i) => (
                     <li key={i}>{m}</li>
                   ))}
@@ -129,8 +129,8 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
             ) : null}
             {data.metrics.month1?.length ? (
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Month 1 metrics</h4>
-                <ul className="list-disc list-inside text-gray-600 text-sm">
+                <h4 className="font-medium text-foreground mb-2">Month 1 metrics</h4>
+                <ul className="list-disc list-inside text-muted-foreground text-sm">
                   {data.metrics.month1.map((m, i) => (
                     <li key={i}>{m}</li>
                   ))}
@@ -141,11 +141,11 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {projectId && metricsCharts?.stage5?.length ? (
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">GTM metrics (charts)</h4>
-            <p className="text-gray-600 text-sm mb-3">Persona mix and success metrics distribution.</p>
+            <h4 className="font-medium text-foreground mb-2">GTM metrics (charts)</h4>
+            <p className="text-muted-foreground text-sm mb-3">Persona mix and success metrics distribution.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {metricsCharts.stage5.map((filename) => (
-                <figure key={filename} className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                <figure key={filename} className="rounded-lg border border-white/10 overflow-hidden bg-card/40">
                   <img
                     src={getMetricsChartUrl(projectId, filename)}
                     alt={filename.replace('.png', '').replace(/-/g, ' ')}

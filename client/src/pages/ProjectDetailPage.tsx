@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getProject, updateProject, brainstorm, deleteProject, runStageAnalysis } from '../services/api';
-import { Stage1Analysis } from '../components/Stage1Analysis';
-import { Stage2Analysis } from '../components/Stage2Analysis';
-import { Stage3Analysis } from '../components/Stage3Analysis';
-import { Stage4Analysis } from '../components/Stage4Analysis';
-import { Stage5Analysis } from '../components/Stage5Analysis';
-import { StageSection } from '../components/StageSection';
-import { StageIndicator } from '../components/StageIndicator';
-import type { Project, Stage1Analysis as Stage1AnalysisType } from '../types/project';
+import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  getProject,
+  updateProject,
+  brainstorm,
+  deleteProject,
+  runStageAnalysis,
+} from "../services/api";
+import { Stage1Analysis } from "../components/Stage1Analysis";
+import { Stage2Analysis } from "../components/Stage2Analysis";
+import { Stage3Analysis } from "../components/Stage3Analysis";
+import { Stage4Analysis } from "../components/Stage4Analysis";
+import { Stage5Analysis } from "../components/Stage5Analysis";
+import { StageSection } from "../components/StageSection";
+import { StageIndicator } from "../components/StageIndicator";
+import type { Project, Stage1Analysis as Stage1AnalysisType } from "../types/project";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -22,18 +30,18 @@ export function ProjectDetailPage() {
     if (!id) return;
     getProject(id)
       .then(setProject)
-      .catch((e) => setError(e instanceof Error ? e.message : 'Failed to load project'))
+      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load project"))
       .finally(() => setLoading(false));
   }, [id]);
 
   const handleDelete = async () => {
     if (!id) return;
-    if (!confirm('Delete this project? This cannot be undone.')) return;
+    if (!confirm("Delete this project? This cannot be undone.")) return;
     try {
       await deleteProject(id);
-      navigate('/');
+      navigate("/");
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Failed to delete project');
+      alert(e instanceof Error ? e.message : "Failed to delete project");
     }
   };
 
@@ -71,56 +79,62 @@ export function ProjectDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
-        <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
 
   if (error || !project) {
     return (
-      <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-red-700">
-        {error ?? 'Project not found'}
-        <Link to="/" className="block mt-2 text-primary-600 hover:underline">
-          Back to home
+      <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-4 text-destructive">
+        {error ?? "Project not found"}
+        <Link to="/" className="block mt-2 text-primary hover:underline">
+          Back to projects
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center gap-4 flex-wrap justify-between">
+    <div className="max-w-4xl mx-auto space-y-6 pb-20">
+      <div className="flex items-center justify-between">
         <Link
           to="/"
-          className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+          className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors"
         >
-          ← Back to projects
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to projects</span>
         </Link>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={handleDelete}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 transition"
-          title="Delete project"
+          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-            <path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clipRule="evenodd" />
-          </svg>
           Delete project
-        </button>
+        </Button>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-gray-900">{project.title || 'Untitled'}</h1>
-        <StageIndicator currentStage={project.currentStage} />
-      </div>
-      {project.summary && (
-        <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Summary</h3>
-          <p className="text-gray-600 text-sm">{project.summary}</p>
+
+      <div className="glass-panel p-8 rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+              {project.title || "Untitled"}
+            </h1>
+            <StageIndicator currentStage={project.currentStage} />
+          </div>
         </div>
-      )}
+        {project.summary && (
+          <div className="relative z-10 mt-4 rounded-lg bg-white/5 border border-white/10 p-4">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Summary</h3>
+            <p className="text-foreground/90 text-sm">{project.summary}</p>
+          </div>
+        )}
+      </div>
 
       <div className="space-y-4">
-        {/* Stage 1: Strategy & Ideation — from PDF upload */}
         <StageSection stageNumber={1} title="Strategy & Ideation" defaultOpen>
           {project.stage1Analysis ? (
             <Stage1Analysis
@@ -129,11 +143,13 @@ export function ProjectDetailPage() {
               onBrainstorm={handleBrainstorm}
             />
           ) : (
-            <p className="text-gray-500 text-sm">Stage 1 is generated when you upload a PDF. Re-upload or create a new project to run Stage 1.</p>
+            <p className="text-muted-foreground text-sm">
+              Stage 1 is generated when you upload a PDF. Re-upload or create a new project to run
+              Stage 1.
+            </p>
           )}
         </StageSection>
 
-        {/* Stages 2–5: Generate on demand */}
         <Stage2Analysis
           data={project.stage2Analysis}
           onGenerate={() => handleGenerateStage(2)}

@@ -1,0 +1,830 @@
+{
+  "id": "b9b0c2a6-21ae-4a06-ba94-6eeb36fd8ef8",
+  "title": "PNC Refund Radar",
+  "createdAt": "2026-02-07T23:26:53.175Z",
+  "currentStage": 5,
+  "pdfPath": "uploads/b9b0c2a6-21ae-4a06-ba94-6eeb36fd8ef8/PM_Startup.pdf",
+  "rawDocument": "I. Strategic Identity ● Feature Name: PNC Refund Radar ● Product Pillar: Virtual Wallet / Cash Flow Management ● Target Persona: High-frequency online shoppers (Gen Z/Millennials) who utilize 'Buy Now, Pay Later' or return items frequently. ● The 'Magic Moment': Receiving a notification the moment a merchant initiates a refund, even before the money hits the ledger, so the user knows they 'won' the dispute or return. II. The Problem Space (Deep Dive) ● The Micro-Friction Event: A user returns a $200 jacket to a retailer. They check their transaction history daily for 7 days. Because the refund date often differs from the return date, they have to scroll back through weeks of data to see if the credit arrived. ● Data Blind Spots: Users cannot see the difference between a 'Pending Credit' and a 'Settled Credit.' They also don't know if a partial refund (e.g., $180 vs $200) is due to a restocking fee or a bank error. ● Psychological Hurdle: 'Financial Limbo.' The user feels they have $200 'missing' in the world, which prevents them from making other necessary purchases, leading to a feeling of being out of control. ● Existing Workarounds: Users keep screenshots of return receipts or keep 'Return' emails marked as unread in their inbox until they manually verify the credit in the PNC app. ● The Cost of Inaction: High volume of 'Where is my money?' calls to PNC support; customers perceiving the bank as 'slow' even when the delay is on the merchant’s end. III. Strategic Constraints & Inputs ● Integrations: Must pull data from ISO 8583 transaction messaging (specifically looking for 'Credit' indicators) and integrate with the Virtual Wallet 'Calendar' view. ● The 'North Star' Policy: Must adhere to Reg E (Electronic Fund Transfers) regarding the timing of when credits must be made available to the customer. ● The 'Do-Not-Touch' List: The feature should NOT allow the user to spend the refund until the funds are officially settled/cleared, to avoid overdraft risk if the merchant reverses the credit.",
+  "summary": "The product solves refund uncertainty by providing early refund initiation notifications, distinguishing pending from settled credits, and offering contextual explanations for discrepancies. It targets Gen Z and Millennial online shoppers and BNPL users who experience frequent returns and financial uncertainty. The feature aligns with PNC’s goals to improve transparency, reduce support inquiries, enhance Virtual Wallet, and maintain regulatory compliance while differentiating PNC through proactive refund visibility.",
+  "stage1Analysis": {
+    "productIdeas": [
+      "Real-time notifications when merchants initiate refunds, before settlement appears in the ledger",
+      "Clear distinction between pending credits and settled credits",
+      "Refund tracking integrated into Virtual Wallet calendar view",
+      "Contextual explanations for partial refunds (e.g., restocking fees)",
+      "A consolidated refund timeline to eliminate manual tracking or inbox reminders"
+    ],
+    "marketSizing": {
+      "highFrequencyShoppers": "Large and growing population of Gen Z and Millennial online shoppers with high return rates",
+      "bnplUsers": "Expansion opportunity based on increasing adoption of Buy Now, Pay Later services",
+      "supportCostReduction": "Significant volume of customer service calls regarding refund status could be reduced",
+      "ecommerceGrowth": "Rising e-commerce transaction volume increases refund friction pain points"
+    },
+    "customerSegments": [
+      "Gen Z and Millennial online shoppers",
+      "BNPL (Buy Now Pay Later) users",
+      "Customers who frequently return merchandise",
+      "Users who closely monitor cash flow due to budgeting constraints"
+    ],
+    "businessGoals": [
+      "Reduce customer support volume related to refund inquiries",
+      "Improve customer trust by increasing transparency into refund processes",
+      "Enhance Virtual Wallet’s value as a cash flow management tool",
+      "Position PNC as a proactive and customer-centric banking experience",
+      "Prevent overdraft risk while keeping customers informed"
+    ],
+    "scenarios": [
+      "Customer returns an item and wants immediate confirmation that the merchant initiated a refund",
+      "Partial refunds occur and customers need clarity on the discrepancy",
+      "Users check transaction history repeatedly due to uncertainty around refund timing",
+      "Integration with transaction messaging and settlement constraints must be honored",
+      "Feature must communicate refund status without allowing premature fund access"
+    ],
+    "customerNeeds": [
+      "Visibility into when refunds are initiated",
+      "A clear distinction between pending and settled credits",
+      "Understanding of refund discrepancies",
+      "Reduction in financial uncertainty during refund waiting periods",
+      "A frictionless way to track returns without manual workarounds"
+    ],
+    "competitiveInsights": "Few banks provide real-time initiated-refund notifications or clear pending vs. settled credit visibility, especially integrated into cash-flow tools like a wallet calendar. Early transparency creates differentiation versus competitors perceived as slow or opaque in refund processing."
+  },
+  "metricsCharts": {
+    "stage1": [
+      "stage1-market-sizing.png",
+      "stage1-customer-segments.png",
+      "stage1-scenarios.png"
+    ],
+    "stage2": [
+      "stage2-priority.png",
+      "stage2-effort.png",
+      "stage2-mvp-later.png"
+    ],
+    "stage3": [
+      "stage3-feedback-themes.png",
+      "stage3-competitors.png",
+      "stage3-trends.png"
+    ],
+    "stage5": [
+      "stage5-personas.png",
+      "stage5-metrics.png"
+    ]
+  },
+  "stage2Analysis": {
+    "epics": [
+      {
+        "name": "Refund Detection & Ingestion",
+        "description": "Identify and ingest merchant-initiated refund signals from ISO 8583 and map them to user accounts."
+      },
+      {
+        "name": "Refund Status Visibility",
+        "description": "Display clear distinctions between pending and settled refunds within transaction history and wallet."
+      },
+      {
+        "name": "Refund Notifications",
+        "description": "Provide real-time alerts when refund initiation is detected, before funds settle."
+      },
+      {
+        "name": "Refund Detail & Explanations",
+        "description": "Surface contextual information such as partial refund reasons and expected timelines."
+      },
+      {
+        "name": "Calendar Integration",
+        "description": "Integrate refund projections and events into the Virtual Wallet calendar view."
+      },
+      {
+        "name": "Refund Tracking Hub",
+        "description": "Provide a consolidated view of all active and past refunds, eliminating the need for manual tracking."
+      }
+    ],
+    "userStories": [
+      {
+        "story": "As a high-frequency shopper, I want the system to detect refund initiation from ISO 8583 messages, so that I know the moment a merchant begins the refund process.",
+        "epic": "Refund Detection & Ingestion",
+        "priority": "P0",
+        "effort": "L",
+        "dependencies": "ISO 8583 feed"
+      },
+      {
+        "story": "As a user, I want pending refunds to appear distinctly from settled refunds, so that I don’t confuse them with completed credits.",
+        "epic": "Refund Status Visibility",
+        "priority": "P0",
+        "effort": "M",
+        "dependencies": "Refund detection"
+      },
+      {
+        "story": "As a user, I want a mobile push notification when a refund is initiated, so that I’m immediately aware without checking my ledger.",
+        "epic": "Refund Notifications",
+        "priority": "P0",
+        "effort": "M",
+        "dependencies": "Refund detection"
+      },
+      {
+        "story": "As a user, I want to see the estimated settlement window for a pending refund, so that I can plan my cash flow.",
+        "epic": "Refund Detail & Explanations",
+        "priority": "P1",
+        "effort": "M",
+        "dependencies": "Refund status visibility"
+      },
+      {
+        "story": "As a user, I want the app to show me whether a refund is full or partial, so that I can understand unexpected differences.",
+        "epic": "Refund Detail & Explanations",
+        "priority": "P0",
+        "effort": "S",
+        "dependencies": "Refund detection"
+      },
+      {
+        "story": "As a user, I want an explanation for partial refunds, such as restocking fees, so that I don’t assume a bank error.",
+        "epic": "Refund Detail & Explanations",
+        "priority": "P1",
+        "effort": "M",
+        "dependencies": "Merchant metadata"
+      },
+      {
+        "story": "As a user, I want refund events to appear in my Virtual Wallet calendar, so that I see how they affect future cash flow.",
+        "epic": "Calendar Integration",
+        "priority": "P1",
+        "effort": "M",
+        "dependencies": "Refund status visibility"
+      },
+      {
+        "story": "As a user, I want the calendar to distinguish between expected (pending) and confirmed (settled) refunds, so that I don’t mistakenly assume funds are spendable.",
+        "epic": "Calendar Integration",
+        "priority": "P2",
+        "effort": "S",
+        "dependencies": "Calendar integration base"
+      },
+      {
+        "story": "As a user, I want a consolidated refund tracking screen, so that I no longer need to rely on screenshots or flagged emails.",
+        "epic": "Refund Tracking Hub",
+        "priority": "P1",
+        "effort": "L",
+        "dependencies": "Refund detection, refund status visibility"
+      },
+      {
+        "story": "As a user, I want to know which transaction a refund is associated with, so that refund tracking is understandable.",
+        "epic": "Refund Tracking Hub",
+        "priority": "P0",
+        "effort": "M",
+        "dependencies": "Refund matching logic"
+      },
+      {
+        "story": "As a user, I want to receive an alert when a pending refund fails or is reversed, so that I know the merchant did not complete it.",
+        "epic": "Refund Notifications",
+        "priority": "P1",
+        "effort": "S",
+        "dependencies": "Refund status updates"
+      },
+      {
+        "story": "As a user, I want refunds clearly marked as unavailable‑to‑spend until settled, so that I don’t accidentally overdraft.",
+        "epic": "Refund Status Visibility",
+        "priority": "P0",
+        "effort": "S",
+        "dependencies": ""
+      },
+      {
+        "story": "As a user, I want the app to show me the original purchase amount and date when viewing a refund, so that my financial timeline is clear.",
+        "epic": "Refund Detail & Explanations",
+        "priority": "P2",
+        "effort": "S",
+        "dependencies": "Refund matching logic"
+      },
+      {
+        "story": "As a user, I want to filter refunds by status (pending/settled) in the tracking hub, so that I can quickly confirm what’s still outstanding.",
+        "epic": "Refund Tracking Hub",
+        "priority": "P2",
+        "effort": "S",
+        "dependencies": "Refund tracking base"
+      },
+      {
+        "story": "As a user, I want to receive a notification when a refund fully settles, so that I know it is officially available.",
+        "epic": "Refund Notifications",
+        "priority": "P0",
+        "effort": "S",
+        "dependencies": "Settlement feed"
+      }
+    ],
+    "acceptanceCriteria": [
+      {
+        "storyRef": "As a high-frequency shopper, I want the system to detect refund initiation from ISO 8583 messages, so that I know the moment a merchant begins the refund process.",
+        "criteria": [
+          "Given a merchant sends a credit indicator in the ISO 8583 message, When it is received by the system, Then the refund should be classified as an initiated refund.",
+          "Given a malformed ISO 8583 message, When parsing fails, Then the system logs an error and does not generate a false refund event."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want pending refunds to appear distinctly from settled refunds, so that I don’t confuse them with completed credits.",
+        "criteria": [
+          "Given a refund is initiated, When the user views the transaction list, Then the refund is labeled as Pending.",
+          "Given a refund settles, When the ledger updates, Then the refund label changes to Settled.",
+          "Given a refund was initiated but later reversed by the merchant, When the user opens the ledger, Then the pending refund is removed and a reversal note is displayed."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want a mobile push notification when a refund is initiated, so that I’m immediately aware without checking my ledger.",
+        "criteria": [
+          "Given a refund initiation event is detected, When the event is processed, Then the user receives a push notification.",
+          "Given the user has disabled notifications, When the refund is initiated, Then no push is sent."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want the app to show me whether a refund is full or partial, so that I can understand unexpected differences.",
+        "criteria": [
+          "Given a refund amount is less than the purchase amount, When shown in the UI, Then it is labeled as Partial refund.",
+          "Given the merchant sends an amount equal to the original total, When shown in the UI, Then it is labeled as Full refund."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want an explanation for partial refunds, such as restocking fees, so that I don’t assume a bank error.",
+        "criteria": [
+          "Given merchant metadata includes fee details, When a partial refund is displayed, Then the explanation is shown.",
+          "Given no metadata is available, When viewing the refund, Then the app displays 'Merchant may have applied fees.'"
+        ]
+      },
+      {
+        "storyRef": "As a user, I want refund events to appear in my Virtual Wallet calendar, so that I see how they affect future cash flow.",
+        "criteria": [
+          "Given a pending refund exists, When the user views the calendar, Then the refund appears on the expected settlement date.",
+          "Given the expected date changes, When updated in the system, Then the calendar automatically adjusts."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want a consolidated refund tracking screen, so that I no longer need to rely on screenshots or flagged emails.",
+        "criteria": [
+          "Given the user has active refunds, When they open the tracking hub, Then all refunds appear with their statuses.",
+          "Given the user has no pending refunds, When opening the hub, Then a no-pending-refunds message is displayed."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want to know which transaction a refund is associated with, so that refund tracking is understandable.",
+        "criteria": [
+          "Given a refund has a corresponding purchase match, When viewed in the UI, Then the original transaction details are displayed.",
+          "Given multiple purchases have identical amounts, When matching fails, Then the app prompts 'Unable to match automatically.'"
+        ]
+      },
+      {
+        "storyRef": "As a user, I want refunds clearly marked as unavailable‑to‑spend until settled, so that I don’t accidentally overdraft.",
+        "criteria": [
+          "Given a refund is pending, When viewing account balance, Then the pending amount is not included in available balance.",
+          "Given a refund is settled, When the ledger updates, Then the credit is added to available balance."
+        ]
+      },
+      {
+        "storyRef": "As a user, I want to receive a notification when a refund fully settles, so that I know it is officially available.",
+        "criteria": [
+          "Given a refund status changes from pending to settled, When the system updates, Then a settlement notification is triggered.",
+          "Given the user disabled notifications, When settlement occurs, Then no notification is sent."
+        ]
+      }
+    ],
+    "mvpVsLater": {
+      "mvp": [
+        "Refund detection from ISO 8583",
+        "Pending vs settled refund visibility",
+        "Refund initiation notifications",
+        "Full vs partial refund differentiation",
+        "Settlement notifications",
+        "Refund unavailable-to-spend labeling"
+      ],
+      "later": [
+        "Refund explanations for partial refunds",
+        "Calendar integration with expected settlement dates",
+        "Refund tracking hub with filters",
+        "Enhanced merchant metadata explanations"
+      ]
+    },
+    "assumptions": [
+      "Merchant refund metadata is reliably available for at least major retailers.",
+      "ISO 8583 credit indicators are consistent enough to detect refund initiation.",
+      "Push notification infrastructure exists and can be reused.",
+      "Calendar integration APIs already exist in Virtual Wallet.",
+      "Reg E compliance rules are already modeled in settlement logic.",
+      "Matching refunds to purchases is possible for at least 90% of cases."
+    ],
+    "raw": "{\"epics\":[{\"name\":\"Refund Detection & Ingestion\",\"description\":\"Identify and ingest merchant-initiated refund signals from ISO 8583 and map them to user accounts.\"},{\"name\":\"Refund Status Visibility\",\"description\":\"Display clear distinctions between pending and settled refunds within transaction history and wallet.\"},{\"name\":\"Refund Notifications\",\"description\":\"Provide real-time alerts when refund initiation is detected, before funds settle.\"},{\"name\":\"Refund Detail & Explanations\",\"description\":\"Surface contextual information such as partial refund reasons and expected timelines.\"},{\"name\":\"Calendar Integration\",\"description\":\"Integrate refund projections and events into the Virtual Wallet calendar view.\"},{\"name\":\"Refund Tracking Hub\",\"description\":\"Provide a consolidated view of all active and past refunds, eliminating the need for manual tracking.\"}],\"userStories\":[{\"story\":\"As a high-frequency shopper, I want the system to detect refund initiation from ISO 8583 messages, so that I know the moment a merchant begins the refund process.\",\"epic\":\"Refund Detection & Ingestion\",\"priority\":\"P0\",\"effort\":\"L\",\"dependencies\":\"ISO 8583 feed\"},{\"story\":\"As a user, I want pending refunds to appear distinctly from settled refunds, so that I don’t confuse them with completed credits.\",\"epic\":\"Refund Status Visibility\",\"priority\":\"P0\",\"effort\":\"M\",\"dependencies\":\"Refund detection\"},{\"story\":\"As a user, I want a mobile push notification when a refund is initiated, so that I’m immediately aware without checking my ledger.\",\"epic\":\"Refund Notifications\",\"priority\":\"P0\",\"effort\":\"M\",\"dependencies\":\"Refund detection\"},{\"story\":\"As a user, I want to see the estimated settlement window for a pending refund, so that I can plan my cash flow.\",\"epic\":\"Refund Detail & Explanations\",\"priority\":\"P1\",\"effort\":\"M\",\"dependencies\":\"Refund status visibility\"},{\"story\":\"As a user, I want the app to show me whether a refund is full or partial, so that I can understand unexpected differences.\",\"epic\":\"Refund Detail & Explanations\",\"priority\":\"P0\",\"effort\":\"S\",\"dependencies\":\"Refund detection\"},{\"story\":\"As a user, I want an explanation for partial refunds, such as restocking fees, so that I don’t assume a bank error.\",\"epic\":\"Refund Detail & Explanations\",\"priority\":\"P1\",\"effort\":\"M\",\"dependencies\":\"Merchant metadata\"},{\"story\":\"As a user, I want refund events to appear in my Virtual Wallet calendar, so that I see how they affect future cash flow.\",\"epic\":\"Calendar Integration\",\"priority\":\"P1\",\"effort\":\"M\",\"dependencies\":\"Refund status visibility\"},{\"story\":\"As a user, I want the calendar to distinguish between expected (pending) and confirmed (settled) refunds, so that I don’t mistakenly assume funds are spendable.\",\"epic\":\"Calendar Integration\",\"priority\":\"P2\",\"effort\":\"S\",\"dependencies\":\"Calendar integration base\"},{\"story\":\"As a user, I want a consolidated refund tracking screen, so that I no longer need to rely on screenshots or flagged emails.\",\"epic\":\"Refund Tracking Hub\",\"priority\":\"P1\",\"effort\":\"L\",\"dependencies\":\"Refund detection, refund status visibility\"},{\"story\":\"As a user, I want to know which transaction a refund is associated with, so that refund tracking is understandable.\",\"epic\":\"Refund Tracking Hub\",\"priority\":\"P0\",\"effort\":\"M\",\"dependencies\":\"Refund matching logic\"},{\"story\":\"As a user, I want to receive an alert when a pending refund fails or is reversed, so that I know the merchant did not complete it.\",\"epic\":\"Refund Notifications\",\"priority\":\"P1\",\"effort\":\"S\",\"dependencies\":\"Refund status updates\"},{\"story\":\"As a user, I want refunds clearly marked as unavailable‑to‑spend until settled, so that I don’t accidentally overdraft.\",\"epic\":\"Refund Status Visibility\",\"priority\":\"P0\",\"effort\":\"S\",\"dependencies\":\"\"},{\"story\":\"As a user, I want the app to show me the original purchase amount and date when viewing a refund, so that my financial timeline is clear.\",\"epic\":\"Refund Detail & Explanations\",\"priority\":\"P2\",\"effort\":\"S\",\"dependencies\":\"Refund matching logic\"},{\"story\":\"As a user, I want to filter refunds by status (pending/settled) in the tracking hub, so that I can quickly confirm what’s still outstanding.\",\"epic\":\"Refund Tracking Hub\",\"priority\":\"P2\",\"effort\":\"S\",\"dependencies\":\"Refund tracking base\"},{\"story\":\"As a user, I want to receive a notification when a refund fully settles, so that I know it is officially available.\",\"epic\":\"Refund Notifications\",\"priority\":\"P0\",\"effort\":\"S\",\"dependencies\":\"Settlement feed\"}],\"acceptanceCriteria\":[{\"storyRef\":\"As a high-frequency shopper, I want the system to detect refund initiation from ISO 8583 messages, so that I know the moment a merchant begins the refund process.\",\"criteria\":[\"Given a merchant sends a credit indicator in the ISO 8583 message, When it is received by the system, Then the refund should be classified as an initiated refund.\",\"Given a malformed ISO 8583 message, When parsing fails, Then the system logs an error and does not generate a false refund event.\"]},{\"storyRef\":\"As a user, I want pending refunds to appear distinctly from settled refunds, so that I don’t confuse them with completed credits.\",\"criteria\":[\"Given a refund is initiated, When the user views the transaction list, Then the refund is labeled as Pending.\",\"Given a refund settles, When the ledger updates, Then the refund label changes to Settled.\",\"Given a refund was initiated but later reversed by the merchant, When the user opens the ledger, Then the pending refund is removed and a reversal note is displayed.\"]},{\"storyRef\":\"As a user, I want a mobile push notification when a refund is initiated, so that I’m immediately aware without checking my ledger.\",\"criteria\":[\"Given a refund initiation event is detected, When the event is processed, Then the user receives a push notification.\",\"Given the user has disabled notifications, When the refund is initiated, Then no push is sent.\"]},{\"storyRef\":\"As a user, I want the app to show me whether a refund is full or partial, so that I can understand unexpected differences.\",\"criteria\":[\"Given a refund amount is less than the purchase amount, When shown in the UI, Then it is labeled as Partial refund.\",\"Given the merchant sends an amount equal to the original total, When shown in the UI, Then it is labeled as Full refund.\"]},{\"storyRef\":\"As a user, I want an explanation for partial refunds, such as restocking fees, so that I don’t assume a bank error.\",\"criteria\":[\"Given merchant metadata includes fee details, When a partial refund is displayed, Then the explanation is shown.\",\"Given no metadata is available, When viewing the refund, Then the app displays 'Merchant may have applied fees.'\"]},{\"storyRef\":\"As a user, I want refund events to appear in my Virtual Wallet calendar, so that I see how they affect future cash flow.\",\"criteria\":[\"Given a pending refund exists, When the user views the calendar, Then the refund appears on the expected settlement date.\",\"Given the expected date changes, When updated in the system, Then the calendar automatically adjusts.\"]},{\"storyRef\":\"As a user, I want a consolidated refund tracking screen, so that I no longer need to rely on screenshots or flagged emails.\",\"criteria\":[\"Given the user has active refunds, When they open the tracking hub, Then all refunds appear with their statuses.\",\"Given the user has no pending refunds, When opening the hub, Then a no-pending-refunds message is displayed.\"]},{\"storyRef\":\"As a user, I want to know which transaction a refund is associated with, so that refund tracking is understandable.\",\"criteria\":[\"Given a refund has a corresponding purchase match, When viewed in the UI, Then the original transaction details are displayed.\",\"Given multiple purchases have identical amounts, When matching fails, Then the app prompts 'Unable to match automatically.'\"]},{\"storyRef\":\"As a user, I want refunds clearly marked as unavailable‑to‑spend until settled, so that I don’t accidentally overdraft.\",\"criteria\":[\"Given a refund is pending, When viewing account balance, Then the pending amount is not included in available balance.\",\"Given a refund is settled, When the ledger updates, Then the credit is added to available balance.\"]},{\"storyRef\":\"As a user, I want to receive a notification when a refund fully settles, so that I know it is officially available.\",\"criteria\":[\"Given a refund status changes from pending to settled, When the system updates, Then a settlement notification is triggered.\",\"Given the user disabled notifications, When settlement occurs, Then no notification is sent.\"]}],\"mvpVsLater\":{\"mvp\":[\"Refund detection from ISO 8583\",\"Pending vs settled refund visibility\",\"Refund initiation notifications\",\"Full vs partial refund differentiation\",\"Settlement notifications\",\"Refund unavailable-to-spend labeling\"],\"later\":[\"Refund explanations for partial refunds\",\"Calendar integration with expected settlement dates\",\"Refund tracking hub with filters\",\"Enhanced merchant metadata explanations\"]},\"assumptions\":[\"Merchant refund metadata is reliably available for at least major retailers.\",\"ISO 8583 credit indicators are consistent enough to detect refund initiation.\",\"Push notification infrastructure exists and can be reused.\",\"Calendar integration APIs already exist in Virtual Wallet.\",\"Reg E compliance rules are already modeled in settlement logic.\",\"Matching refunds to purchases is possible for at least 90% of cases.\"]}"
+  },
+  "stage3Analysis": {
+    "feedbackThemes": [
+      {
+        "theme": "Refund Status Uncertainty and Anxiety",
+        "evidence": [
+          "(synthetic) I hate refreshing my account for days just to see if my refund showed up.",
+          "(synthetic) I returned a pair of shoes and kept checking my balance like 20 times. No clue if the store even processed it.",
+          "(synthetic) Not knowing if a refund is coming makes me feel like money is in limbo."
+        ],
+        "impact": "High emotional friction, repeated app checks, and unnecessary support calls.",
+        "opportunity": "Provide early notifications and clear refund status indicators to reduce anxiety and increase trust."
+      },
+      {
+        "theme": "Difficulty Tracking Refunds Over Time",
+        "evidence": [
+          "(synthetic) By the time the refund posted, it was buried under like two weeks of transactions.",
+          "(synthetic) I end up scrolling and scrolling to figure out if the money came back.",
+          "(synthetic) I keep screenshots of my returns because it’s impossible to track in the app."
+        ],
+        "impact": "Users feel they must create manual tracking systems.",
+        "opportunity": "Offer a unified refund timeline and calendar view integration."
+      },
+      {
+        "theme": "Confusion About Partial Refunds",
+        "evidence": [
+          "(synthetic) I got refunded $185 instead of $200 and had no idea why.",
+          "(synthetic) Did the merchant take a fee or did the bank mess up? No clear explanation.",
+          "(synthetic) Partial refunds always make me suspicious something’s wrong."
+        ],
+        "impact": "Creates mistrust and perceived bank errors.",
+        "opportunity": "Provide contextual explanations for refund amount differences."
+      },
+      {
+        "theme": "Need for More Transparency Before Funds Settle",
+        "evidence": [
+          "(synthetic) I wish I knew the second a refund was initiated.",
+          "(synthetic) Other apps tell you when something is pending—why can't my bank?",
+          "(synthetic) I want visibility without actually spending the refund."
+        ],
+        "impact": "Lack of transparency leads users to check more often and feel out of control.",
+        "opportunity": "Introduce clear 'pending vs. settled' visuals while maintaining compliance and preventing spending."
+      },
+      {
+        "theme": "High-Frequency Online Shoppers Expect Real-Time Feedback",
+        "evidence": [
+          "(synthetic) I shop online constantly—refunds are just part of life now.",
+          "(synthetic) BNPL makes returns more complicated; I need to know what's happening instantly.",
+          "(synthetic) Fast notifications are how everything works now… except refunds."
+        ],
+        "impact": "Expectation gap between modern digital behaviors and banking processes.",
+        "opportunity": "Differentiate through proactive refund visibility similar to modern commerce platforms."
+      }
+    ],
+    "competitorComparison": [
+      {
+        "competitor": "Chase",
+        "strength": "Reliable transaction posting and simple UI.",
+        "weakness": "No early refund initiation alerts; no pending vs. settled clarity.",
+        "gapWeExploit": "Provide earlier awareness and richer refund context."
+      },
+      {
+        "competitor": "Bank of America",
+        "strength": "Strong alerts ecosystem.",
+        "weakness": "Alerts trigger only after settlement, not initiation.",
+        "gapWeExploit": "Differentiate with pre-settlement transparency."
+      },
+      {
+        "competitor": "Capital One",
+        "strength": "Fast push notifications and modern UX.",
+        "weakness": "No dedicated refund-tracking tool or partial-refund explanations.",
+        "gapWeExploit": "Offer purpose-built refund tracking integrated into budgeting tools."
+      },
+      {
+        "competitor": "Wells Fargo",
+        "strength": "Stable and consistent posting.",
+        "weakness": "Limited nuance in transaction status communication.",
+        "gapWeExploit": "Surface transaction-level metadata from ISO 8583 for refund clarity."
+      },
+      {
+        "competitor": "Discover",
+        "strength": "Good dispute workflows.",
+        "weakness": "Not optimized for frequent online returns; no proactive refund visibility.",
+        "gapWeExploit": "Target shoppers who return merchandise frequently."
+      },
+      {
+        "competitor": "Apple Cash / Apple Card",
+        "strength": "Strong real-time notifications tied to merchant activity.",
+        "weakness": "Refund visibility depends entirely on merchant timing; no refund timeline.",
+        "gapWeExploit": "Expand beyond notifications into a refund management experience."
+      },
+      {
+        "competitor": "PayPal",
+        "strength": "Shows pending and completed refunds clearly.",
+        "weakness": "Not integrated with full cash-flow or budgeting tools.",
+        "gapWeExploit": "Blend refund transparency with broader money management."
+      },
+      {
+        "competitor": "BNPL platforms (Affirm/Klarna)",
+        "strength": "Highly transparent refund and return flows.",
+        "weakness": "Only useful for BNPL transactions.",
+        "gapWeExploit": "Provide Klarna-level visibility for all refund types across all merchants."
+      }
+    ],
+    "trends": [
+      {
+        "trend": "Real-time financial visibility expectations driven by Gen Z and commerce apps",
+        "implication": "Banks that fail to offer instant status updates risk appearing outdated."
+      },
+      {
+        "trend": "Increasing volume of online returns and BNPL transactions",
+        "implication": "Refund uncertainty will grow unless financial institutions enhance visibility."
+      },
+      {
+        "trend": "Greater use of ISO 8583 metadata for enriched transaction experiences",
+        "implication": "Banks can differentiate by using deeper transaction data for proactive insights."
+      },
+      {
+        "trend": "Shift toward proactive vs reactive financial notifications",
+        "implication": "Early refund notifications align with broader industry movement toward anticipatory financial tools."
+      },
+      {
+        "trend": "Customers expect banks to act like retail apps (Amazon, Klarna)",
+        "implication": "Banks that mimic commerce-grade transparency will gain trust and loyalty."
+      },
+      {
+        "trend": "Rising regulatory focus on transparency around electronic fund transfers",
+        "implication": "Clear status messaging supports compliance and reduces disputes."
+      }
+    ],
+    "insights": [
+      "Refund uncertainty generates more emotional stress than the refund delay itself.",
+      "Users already track refunds manually, showing unmet needs that a built-in tool could solve.",
+      "Partial refunds are a major misunderstanding driver, often attributed incorrectly to bank error.",
+      "High-frequency returners represent a fast-growing segment who value transparency over speed.",
+      "Early visibility could significantly reduce refund-related support contact volume."
+    ],
+    "opportunities": [
+      "Deliver a real-time refund initiation notification before settlement posts.",
+      "Create a unified refund timeline with pending, initiated, and settled states.",
+      "Integrate refunds into the Virtual Wallet calendar to improve cash-flow visibility.",
+      "Provide merchant-contextual explanations for partial or delayed refunds.",
+      "Differentiate PNC through transparency features competitors lack."
+    ],
+    "risks": [
+      "Users may misunderstand pending refunds as available funds, risking overdrafts.",
+      "Merchants may reverse initiated refunds, causing confusion if not clearly communicated.",
+      "Data availability from ISO 8583 may be inconsistent across merchants.",
+      "Over-notification could irritate users if not tuned correctly.",
+      "Regulatory compliance requires careful wording around credit timing."
+    ],
+    "nextResearchSteps": [
+      "Conduct diary studies of users who frequently return online purchases.",
+      "Run concept testing on pending vs settled refund UI distinctions.",
+      "Interview customer support agents to map refund-related call drivers.",
+      "Validate feasibility with engineering regarding ISO 8583 refund indicators.",
+      "Test notification language for clarity around non-spendable funds."
+    ],
+    "assumptions": [
+      "ISO 8583 consistently identifies refund initiation events.",
+      "Users prefer early awareness even if funds are not yet available.",
+      "Partial refund explanations can be reliably inferred or sourced.",
+      "Gen Z and Millennials represent the highest-need target segment.",
+      "The feature will meaningfully reduce refund-related support calls."
+    ],
+    "raw": "{\"feedbackThemes\":[{\"theme\":\"Refund Status Uncertainty and Anxiety\",\"evidence\":[\"(synthetic) I hate refreshing my account for days just to see if my refund showed up.\",\"(synthetic) I returned a pair of shoes and kept checking my balance like 20 times. No clue if the store even processed it.\",\"(synthetic) Not knowing if a refund is coming makes me feel like money is in limbo.\"],\"impact\":\"High emotional friction, repeated app checks, and unnecessary support calls.\",\"opportunity\":\"Provide early notifications and clear refund status indicators to reduce anxiety and increase trust.\"},{\"theme\":\"Difficulty Tracking Refunds Over Time\",\"evidence\":[\"(synthetic) By the time the refund posted, it was buried under like two weeks of transactions.\",\"(synthetic) I end up scrolling and scrolling to figure out if the money came back.\",\"(synthetic) I keep screenshots of my returns because it’s impossible to track in the app.\"],\"impact\":\"Users feel they must create manual tracking systems.\",\"opportunity\":\"Offer a unified refund timeline and calendar view integration.\"},{\"theme\":\"Confusion About Partial Refunds\",\"evidence\":[\"(synthetic) I got refunded $185 instead of $200 and had no idea why.\",\"(synthetic) Did the merchant take a fee or did the bank mess up? No clear explanation.\",\"(synthetic) Partial refunds always make me suspicious something’s wrong.\"],\"impact\":\"Creates mistrust and perceived bank errors.\",\"opportunity\":\"Provide contextual explanations for refund amount differences.\"},{\"theme\":\"Need for More Transparency Before Funds Settle\",\"evidence\":[\"(synthetic) I wish I knew the second a refund was initiated.\",\"(synthetic) Other apps tell you when something is pending—why can't my bank?\",\"(synthetic) I want visibility without actually spending the refund.\"],\"impact\":\"Lack of transparency leads users to check more often and feel out of control.\",\"opportunity\":\"Introduce clear 'pending vs. settled' visuals while maintaining compliance and preventing spending.\"},{\"theme\":\"High-Frequency Online Shoppers Expect Real-Time Feedback\",\"evidence\":[\"(synthetic) I shop online constantly—refunds are just part of life now.\",\"(synthetic) BNPL makes returns more complicated; I need to know what's happening instantly.\",\"(synthetic) Fast notifications are how everything works now… except refunds.\"],\"impact\":\"Expectation gap between modern digital behaviors and banking processes.\",\"opportunity\":\"Differentiate through proactive refund visibility similar to modern commerce platforms.\"}],\"competitorComparison\":[{\"competitor\":\"Chase\",\"strength\":\"Reliable transaction posting and simple UI.\",\"weakness\":\"No early refund initiation alerts; no pending vs. settled clarity.\",\"gapWeExploit\":\"Provide earlier awareness and richer refund context.\"},{\"competitor\":\"Bank of America\",\"strength\":\"Strong alerts ecosystem.\",\"weakness\":\"Alerts trigger only after settlement, not initiation.\",\"gapWeExploit\":\"Differentiate with pre-settlement transparency.\"},{\"competitor\":\"Capital One\",\"strength\":\"Fast push notifications and modern UX.\",\"weakness\":\"No dedicated refund-tracking tool or partial-refund explanations.\",\"gapWeExploit\":\"Offer purpose-built refund tracking integrated into budgeting tools.\"},{\"competitor\":\"Wells Fargo\",\"strength\":\"Stable and consistent posting.\",\"weakness\":\"Limited nuance in transaction status communication.\",\"gapWeExploit\":\"Surface transaction-level metadata from ISO 8583 for refund clarity.\"},{\"competitor\":\"Discover\",\"strength\":\"Good dispute workflows.\",\"weakness\":\"Not optimized for frequent online returns; no proactive refund visibility.\",\"gapWeExploit\":\"Target shoppers who return merchandise frequently.\"},{\"competitor\":\"Apple Cash / Apple Card\",\"strength\":\"Strong real-time notifications tied to merchant activity.\",\"weakness\":\"Refund visibility depends entirely on merchant timing; no refund timeline.\",\"gapWeExploit\":\"Expand beyond notifications into a refund management experience.\"},{\"competitor\":\"PayPal\",\"strength\":\"Shows pending and completed refunds clearly.\",\"weakness\":\"Not integrated with full cash-flow or budgeting tools.\",\"gapWeExploit\":\"Blend refund transparency with broader money management.\"},{\"competitor\":\"BNPL platforms (Affirm/Klarna)\",\"strength\":\"Highly transparent refund and return flows.\",\"weakness\":\"Only useful for BNPL transactions.\",\"gapWeExploit\":\"Provide Klarna-level visibility for all refund types across all merchants.\"}],\"trends\":[{\"trend\":\"Real-time financial visibility expectations driven by Gen Z and commerce apps\",\"implication\":\"Banks that fail to offer instant status updates risk appearing outdated.\"},{\"trend\":\"Increasing volume of online returns and BNPL transactions\",\"implication\":\"Refund uncertainty will grow unless financial institutions enhance visibility.\"},{\"trend\":\"Greater use of ISO 8583 metadata for enriched transaction experiences\",\"implication\":\"Banks can differentiate by using deeper transaction data for proactive insights.\"},{\"trend\":\"Shift toward proactive vs reactive financial notifications\",\"implication\":\"Early refund notifications align with broader industry movement toward anticipatory financial tools.\"},{\"trend\":\"Customers expect banks to act like retail apps (Amazon, Klarna)\",\"implication\":\"Banks that mimic commerce-grade transparency will gain trust and loyalty.\"},{\"trend\":\"Rising regulatory focus on transparency around electronic fund transfers\",\"implication\":\"Clear status messaging supports compliance and reduces disputes.\"}],\"insights\":[\"Refund uncertainty generates more emotional stress than the refund delay itself.\",\"Users already track refunds manually, showing unmet needs that a built-in tool could solve.\",\"Partial refunds are a major misunderstanding driver, often attributed incorrectly to bank error.\",\"High-frequency returners represent a fast-growing segment who value transparency over speed.\",\"Early visibility could significantly reduce refund-related support contact volume.\"],\"opportunities\":[\"Deliver a real-time refund initiation notification before settlement posts.\",\"Create a unified refund timeline with pending, initiated, and settled states.\",\"Integrate refunds into the Virtual Wallet calendar to improve cash-flow visibility.\",\"Provide merchant-contextual explanations for partial or delayed refunds.\",\"Differentiate PNC through transparency features competitors lack.\"],\"risks\":[\"Users may misunderstand pending refunds as available funds, risking overdrafts.\",\"Merchants may reverse initiated refunds, causing confusion if not clearly communicated.\",\"Data availability from ISO 8583 may be inconsistent across merchants.\",\"Over-notification could irritate users if not tuned correctly.\",\"Regulatory compliance requires careful wording around credit timing.\"],\"nextResearchSteps\":[\"Conduct diary studies of users who frequently return online purchases.\",\"Run concept testing on pending vs settled refund UI distinctions.\",\"Interview customer support agents to map refund-related call drivers.\",\"Validate feasibility with engineering regarding ISO 8583 refund indicators.\",\"Test notification language for clarity around non-spendable funds.\"],\"assumptions\":[\"ISO 8583 consistently identifies refund initiation events.\",\"Users prefer early awareness even if funds are not yet available.\",\"Partial refund explanations can be reliably inferred or sourced.\",\"Gen Z and Millennials represent the highest-need target segment.\",\"The feature will meaningfully reduce refund-related support calls.\"]}"
+  },
+  "stage4Analysis": {
+    "userFlow": {
+      "entryPoints": [
+        "Push notification: 'Refund initiated for your recent return'",
+        "Activity feed card: 'Refund in progress'",
+        "Transaction details screen for purchase",
+        "Virtual Wallet Calendar: upcoming credits view"
+      ],
+      "steps": [
+        "User taps refund notification",
+        "User lands on Refund Detail screen showing pending vs. settled state",
+        "User views refund timeline: initiated → processing → expected settlement",
+        "User expands 'Details' for any partial refund explanation",
+        "User optionally adds reminder or views it in the Calendar",
+        "User returns later to see settlement confirmation"
+      ],
+      "description": "Flow guides users from early refund notification into a clear refund status view, highlighting pending credits and timeline until settlement."
+    },
+    "wireframes": [
+      {
+        "screenName": "Refund Initiated Notification",
+        "purpose": "Alert user the moment the merchant initiates a refund",
+        "components": [
+          "Title text",
+          "Refund amount",
+          "Merchant name",
+          "CTA to view details",
+          "Timestamp"
+        ],
+        "microcopy": [
+          "Refund initiated",
+          "$200 from Urban Outerwear",
+          "Tap to view refund status",
+          "Processing started",
+          "Updated just now"
+        ]
+      },
+      {
+        "screenName": "Refund Detail",
+        "purpose": "Show refund status, timeline, and pending vs. settled state",
+        "components": [
+          "Refund amount and merchant header",
+          "Status badge (Pending Credit)",
+          "Timeline steps",
+          "Partial refund explanation module",
+          "Add-to-Calendar button",
+          "Back button"
+        ],
+        "microcopy": [
+          "Pending credit",
+          "Merchant has initiated your refund",
+          "Expected settlement: 2–5 days",
+          "Possible restocking fee",
+          "Add to calendar"
+        ]
+      },
+      {
+        "screenName": "Refund Timeline",
+        "purpose": "Give users a clear, step-by-step view of refund progress",
+        "components": [
+          "Timeline nodes",
+          "Initiated timestamp",
+          "Processing indicator",
+          "Estimated settlement date",
+          "Help link"
+        ],
+        "microcopy": [
+          "Initiated",
+          "Processing",
+          "Estimated settlement",
+          "Why is this pending?",
+          "View help"
+        ]
+      },
+      {
+        "screenName": "Calendar Integration",
+        "purpose": "Show upcoming refund credit on the Virtual Wallet calendar",
+        "components": [
+          "Calendar grid",
+          "Refund event dot",
+          "Refund summary card on tap",
+          "Back to wallet"
+        ],
+        "microcopy": [
+          "Upcoming refund",
+          "$200 expected",
+          "Estimated credit date",
+          "Return to Wallet",
+          "View refund details"
+        ]
+      },
+      {
+        "screenName": "Refund Settled Confirmation",
+        "purpose": "Confirm settled credit and close loop on user anxiety",
+        "components": [
+          "Success checkmark",
+          "Completed status",
+          "Final credited amount",
+          "Return to activity CTA"
+        ],
+        "microcopy": [
+          "Refund complete",
+          "Funds now available",
+          "$200 credited",
+          "View activity",
+          "Return to Wallet"
+        ]
+      }
+    ],
+    "usabilityTestScript": [
+      {
+        "task": "Identify a new refund",
+        "script": "You just received a refund notification for an item you returned. Show me where you would tap to learn more."
+      },
+      {
+        "task": "Understand refund status",
+        "script": "You are unsure whether the refund has settled. Show me how you confirm its current status."
+      },
+      {
+        "task": "Check partial refund explanation",
+        "script": "You notice the refund is less than expected. Show me where you would go to understand why."
+      },
+      {
+        "task": "Find refund on calendar",
+        "script": "You want to know when the refund will arrive. Show me how to view its estimated date on your calendar."
+      },
+      {
+        "task": "Verify refund completion",
+        "script": "After a few days, you want to check if the refund settled. Show me how you confirm this."
+      }
+    ],
+    "testCases": [
+      {
+        "case": "Notification tap leads to correct screen",
+        "steps": "User taps push notification",
+        "expectedResult": "Refund Detail screen loads with correct data",
+        "priority": "High"
+      },
+      {
+        "case": "Timeline loads correctly",
+        "steps": "User opens Refund Detail and scrolls timeline",
+        "expectedResult": "Nodes show initiated, processing, estimated settlement",
+        "priority": "Medium"
+      },
+      {
+        "case": "Partial refund explanation visible",
+        "steps": "User receives partial credit",
+        "expectedResult": "Explanation module appears with fee reason",
+        "priority": "High"
+      },
+      {
+        "case": "Calendar event visibility",
+        "steps": "User taps Add to Calendar",
+        "expectedResult": "Refund appears on expected date in calendar",
+        "priority": "Medium"
+      },
+      {
+        "case": "Pending vs settled correct state",
+        "steps": "System changes refund state to settled",
+        "expectedResult": "Status badge updates and funds show as available",
+        "priority": "High"
+      },
+      {
+        "case": "Merchant sends multiple partial refunds",
+        "steps": "System receives two credit messages",
+        "expectedResult": "Timeline shows multiple events, amounts itemized",
+        "priority": "High"
+      },
+      {
+        "case": "Notification disabled",
+        "steps": "User has notifications off",
+        "expectedResult": "Refund card appears in activity feed",
+        "priority": "Medium"
+      },
+      {
+        "case": "No explanation available",
+        "steps": "Partial refund but no reason provided",
+        "expectedResult": "Fallback copy appears: 'Your merchant issued a partial refund'",
+        "priority": "Low"
+      },
+      {
+        "case": "Calendar date inaccurate",
+        "steps": "Merchant updates date",
+        "expectedResult": "Updated date reflected with banner: 'Refund timeline updated'",
+        "priority": "Medium"
+      },
+      {
+        "case": "Refund reversed by merchant",
+        "steps": "Merchant sends reversal message",
+        "expectedResult": "Status updates to 'Refund canceled' without releasing funds",
+        "priority": "High"
+      },
+      {
+        "case": "Slow data connection",
+        "steps": "User opens Refund Detail on poor network",
+        "expectedResult": "Skeleton loaders appear until data arrives",
+        "priority": "Low"
+      },
+      {
+        "case": "Very old return surfaced",
+        "steps": "User views a refund from 45 days ago",
+        "expectedResult": "Timeline collapses to summary with settlement confirmed",
+        "priority": "Low"
+      }
+    ],
+    "iteration": [
+      {
+        "feedback": "Users confused by difference between initiated vs pending",
+        "change": "Rename badge to 'Refund started (not yet credited)'"
+      },
+      {
+        "feedback": "Timeline feels too abstract",
+        "change": "Add concrete merchant timestamps when available"
+      },
+      {
+        "feedback": "Users want to know 'what to expect next'",
+        "change": "Add mini-stepper under status: 'Next: settlement check'"
+      },
+      {
+        "feedback": "Calendar entry feels hidden",
+        "change": "Auto-add refund to calendar with opt-out toggle"
+      },
+      {
+        "feedback": "Partial refund explanation hard to find",
+        "change": "Place explanation directly under refund amount"
+      },
+      {
+        "feedback": "Users want confirmation they won the refund",
+        "change": "Add celebratory microcopy: 'Your refund is on the way!'"
+      }
+    ],
+    "assumptions": [
+      "ISO 8583 credit initiation indicators are reliably available",
+      "Settlement windows vary by merchant but can be estimated",
+      "No early spend allowed until official settlement",
+      "Calendar can accept refund events without violating policy"
+    ],
+    "raw": "{\"userFlow\":{\"entryPoints\":[\"Push notification: 'Refund initiated for your recent return'\",\"Activity feed card: 'Refund in progress'\",\"Transaction details screen for purchase\",\"Virtual Wallet Calendar: upcoming credits view\"],\"steps\":[\"User taps refund notification\",\"User lands on Refund Detail screen showing pending vs. settled state\",\"User views refund timeline: initiated → processing → expected settlement\",\"User expands 'Details' for any partial refund explanation\",\"User optionally adds reminder or views it in the Calendar\",\"User returns later to see settlement confirmation\"],\"description\":\"Flow guides users from early refund notification into a clear refund status view, highlighting pending credits and timeline until settlement.\"},\"wireframes\":[{\"screenName\":\"Refund Initiated Notification\",\"purpose\":\"Alert user the moment the merchant initiates a refund\",\"components\":[\"Title text\",\"Refund amount\",\"Merchant name\",\"CTA to view details\",\"Timestamp\"],\"microcopy\":[\"Refund initiated\",\"$200 from Urban Outerwear\",\"Tap to view refund status\",\"Processing started\",\"Updated just now\"]},{\"screenName\":\"Refund Detail\",\"purpose\":\"Show refund status, timeline, and pending vs. settled state\",\"components\":[\"Refund amount and merchant header\",\"Status badge (Pending Credit)\",\"Timeline steps\",\"Partial refund explanation module\",\"Add-to-Calendar button\",\"Back button\"],\"microcopy\":[\"Pending credit\",\"Merchant has initiated your refund\",\"Expected settlement: 2–5 days\",\"Possible restocking fee\",\"Add to calendar\"]},{\"screenName\":\"Refund Timeline\",\"purpose\":\"Give users a clear, step-by-step view of refund progress\",\"components\":[\"Timeline nodes\",\"Initiated timestamp\",\"Processing indicator\",\"Estimated settlement date\",\"Help link\"],\"microcopy\":[\"Initiated\",\"Processing\",\"Estimated settlement\",\"Why is this pending?\",\"View help\"]},{\"screenName\":\"Calendar Integration\",\"purpose\":\"Show upcoming refund credit on the Virtual Wallet calendar\",\"components\":[\"Calendar grid\",\"Refund event dot\",\"Refund summary card on tap\",\"Back to wallet\"],\"microcopy\":[\"Upcoming refund\",\"$200 expected\",\"Estimated credit date\",\"Return to Wallet\",\"View refund details\"]},{\"screenName\":\"Refund Settled Confirmation\",\"purpose\":\"Confirm settled credit and close loop on user anxiety\",\"components\":[\"Success checkmark\",\"Completed status\",\"Final credited amount\",\"Return to activity CTA\"],\"microcopy\":[\"Refund complete\",\"Funds now available\",\"$200 credited\",\"View activity\",\"Return to Wallet\"]}],\"usabilityTestScript\":[{\"task\":\"Identify a new refund\",\"script\":\"You just received a refund notification for an item you returned. Show me where you would tap to learn more.\"},{\"task\":\"Understand refund status\",\"script\":\"You are unsure whether the refund has settled. Show me how you confirm its current status.\"},{\"task\":\"Check partial refund explanation\",\"script\":\"You notice the refund is less than expected. Show me where you would go to understand why.\"},{\"task\":\"Find refund on calendar\",\"script\":\"You want to know when the refund will arrive. Show me how to view its estimated date on your calendar.\"},{\"task\":\"Verify refund completion\",\"script\":\"After a few days, you want to check if the refund settled. Show me how you confirm this.\"}],\"testCases\":[{\"case\":\"Notification tap leads to correct screen\",\"steps\":\"User taps push notification\",\"expectedResult\":\"Refund Detail screen loads with correct data\",\"priority\":\"High\"},{\"case\":\"Timeline loads correctly\",\"steps\":\"User opens Refund Detail and scrolls timeline\",\"expectedResult\":\"Nodes show initiated, processing, estimated settlement\",\"priority\":\"Medium\"},{\"case\":\"Partial refund explanation visible\",\"steps\":\"User receives partial credit\",\"expectedResult\":\"Explanation module appears with fee reason\",\"priority\":\"High\"},{\"case\":\"Calendar event visibility\",\"steps\":\"User taps Add to Calendar\",\"expectedResult\":\"Refund appears on expected date in calendar\",\"priority\":\"Medium\"},{\"case\":\"Pending vs settled correct state\",\"steps\":\"System changes refund state to settled\",\"expectedResult\":\"Status badge updates and funds show as available\",\"priority\":\"High\"},{\"case\":\"Merchant sends multiple partial refunds\",\"steps\":\"System receives two credit messages\",\"expectedResult\":\"Timeline shows multiple events, amounts itemized\",\"priority\":\"High\"},{\"case\":\"Notification disabled\",\"steps\":\"User has notifications off\",\"expectedResult\":\"Refund card appears in activity feed\",\"priority\":\"Medium\"},{\"case\":\"No explanation available\",\"steps\":\"Partial refund but no reason provided\",\"expectedResult\":\"Fallback copy appears: 'Your merchant issued a partial refund'\",\"priority\":\"Low\"},{\"case\":\"Calendar date inaccurate\",\"steps\":\"Merchant updates date\",\"expectedResult\":\"Updated date reflected with banner: 'Refund timeline updated'\",\"priority\":\"Medium\"},{\"case\":\"Refund reversed by merchant\",\"steps\":\"Merchant sends reversal message\",\"expectedResult\":\"Status updates to 'Refund canceled' without releasing funds\",\"priority\":\"High\"},{\"case\":\"Slow data connection\",\"steps\":\"User opens Refund Detail on poor network\",\"expectedResult\":\"Skeleton loaders appear until data arrives\",\"priority\":\"Low\"},{\"case\":\"Very old return surfaced\",\"steps\":\"User views a refund from 45 days ago\",\"expectedResult\":\"Timeline collapses to summary with settlement confirmed\",\"priority\":\"Low\"}],\"iteration\":[{\"feedback\":\"Users confused by difference between initiated vs pending\",\"change\":\"Rename badge to 'Refund started (not yet credited)'\"},{\"feedback\":\"Timeline feels too abstract\",\"change\":\"Add concrete merchant timestamps when available\"},{\"feedback\":\"Users want to know 'what to expect next'\",\"change\":\"Add mini-stepper under status: 'Next: settlement check'\"},{\"feedback\":\"Calendar entry feels hidden\",\"change\":\"Auto-add refund to calendar with opt-out toggle\"},{\"feedback\":\"Partial refund explanation hard to find\",\"change\":\"Place explanation directly under refund amount\"},{\"feedback\":\"Users want confirmation they won the refund\",\"change\":\"Add celebratory microcopy: 'Your refund is on the way!'\"}],\"assumptions\":[\"ISO 8583 credit initiation indicators are reliably available\",\"Settlement windows vary by merchant but can be estimated\",\"No early spend allowed until official settlement\",\"Calendar can accept refund events without violating policy\"]}"
+  },
+  "stage5Analysis": {
+    "personas": [
+      {
+        "type": "primary",
+        "name": "The High-Frequency Online Shopper",
+        "goals": [
+          "Know exactly when a refund is initiated so they can plan cash flow",
+          "Avoid checking transaction history repeatedly",
+          "Feel in control of their money during return cycles"
+        ],
+        "pains": [
+          "Constant uncertainty about when refunds will land",
+          "Difficulty distinguishing pending vs settled credits",
+          "Anxiety that funds are ‘missing’ during the return process"
+        ],
+        "triggers": [
+          "Returning mid- to high-value items",
+          "Using BNPL services frequently",
+          "Feeling cash-constrained while waiting for a refund"
+        ],
+        "objections": [
+          "Will this notification be accurate?",
+          "Will I mistakenly think I can spend the money early?"
+        ],
+        "keyMessage": "Know the moment your refund is initiated so you can stay in control of your cash flow."
+      },
+      {
+        "type": "secondary",
+        "name": "The Budget-Conscious Planner",
+        "goals": [
+          "Predict upcoming credits to avoid overspending",
+          "Track refund timing within their financial calendar",
+          "Understand discrepancies in partial refunds"
+        ],
+        "pains": [
+          "Unexpected delays that disrupt budgeting",
+          "Needing to cross-check merchant emails with banking activity",
+          "Uncertainty around partial refund amounts"
+        ],
+        "triggers": [
+          "Monthly budgeting cycles",
+          "Pending large purchases dependent on expected refunds"
+        ],
+        "objections": [
+          "Will the feature explain why a refund amount changed?",
+          "Will this clutter my notification feed?"
+        ],
+        "keyMessage": "See refund timing clearly so you can budget with confidence."
+      }
+    ],
+    "messaging": {
+      "positioningStatement": "PNC Refund Radar gives customers real-time visibility into refunds the moment merchants initiate them, removing financial uncertainty and helping users plan their cash flow with confidence.",
+      "benefits": [
+        "Instant reassurance with refund-initiated notifications",
+        "Clear separation of pending and settled credits",
+        "Full transparency with refund timelines and explanations"
+      ],
+      "proofPoints": [
+        "Powered by ISO 8583 credit indicators for early detection",
+        "Integrated with Virtual Wallet’s Calendar for cash-flow planning",
+        "Supports Reg E compliance and protects customers from premature spending"
+      ],
+      "taglines": [
+        "Know your refund the moment it starts.",
+        "No more refund limbo.",
+        "Refund clarity, instantly.",
+        "See your money coming back sooner.",
+        "Your refund, finally transparent."
+      ]
+    },
+    "gtmPlan": {
+      "launchGoals": [
+        "Reduce refund-related customer support calls by 15% within 60 days",
+        "Increase Virtual Wallet engagement and daily active users",
+        "Position PNC as a leader in proactive banking transparency"
+      ],
+      "channels": [
+        "In-app education cards highlighting Refund Radar",
+        "Push notification spotlight for early-refund detection",
+        "Email campaign to high-frequency online shoppers",
+        "Social and digital ads targeting Gen Z and Millennials",
+        "Branch and call-center scripts for customer education"
+      ],
+      "rollout": "Closed beta with 5% of Virtual Wallet users, followed by a phased rollout to 25%, then general availability to all eligible customers within 8 weeks.",
+      "risks": [
+        "Merchant-initiated credits may be reversed, leading to confusion",
+        "Customers may assume pending credits are spendable",
+        "Noise from excessive notifications"
+      ]
+    },
+    "releaseNotes": {
+      "customerFacing": "Introducing PNC Refund Radar: Get notified the moment a merchant initiates a refund, even before the money posts to your account. Track pending vs settled credits and understand refund amounts with clear explanations, all integrated into your Virtual Wallet Calendar.",
+      "internal": "Refund Radar adds early visibility into merchant-initiated credits using ISO 8583 indicators. Notifications display refund initiation without making funds available until cleared. Support teams should remind customers that pending refunds cannot be spent. Compliance review confirms adherence to Reg E timing rules."
+    },
+    "stakeholderComms": {
+      "execs": "Refund Radar strengthens our Virtual Wallet strategy by reducing customer uncertainty around refunds, a top driver of support calls. The feature differentiates PNC with proactive transparency and drives higher engagement for Gen Z and Millennial users. Early metrics will focus on call reduction and feature adoption.",
+      "engineering": "Refund Radar requires ingesting ISO 8583 credit indicators to detect merchant-initiated refunds before settlement. Build a pending-credit state in the ledger and deliver a real-time push notification. Integrate the refund timeline into the Virtual Wallet Calendar. Ensure no spend-access is provided before settlement.",
+      "support": "Customers will now receive notifications when merchants initiate refunds. These are pending and not spendable until posted. If customers ask about discrepancies (e.g., partial refunds), advise them to check the explanation in the app. Escalate only if the refund exceeds standard merchant timelines."
+    },
+    "metrics": {
+      "week1": [
+        "Percentage of beta users receiving at least one refund notification",
+        "Push notification open rate",
+        "Early reduction in ‘Where is my refund?’ support calls"
+      ],
+      "month1": [
+        "15%+ reduction in refund-related support contacts",
+        "Adoption rate within Virtual Wallet users",
+        "Increase in Calendar view engagement",
+        "Customer satisfaction score improvement for refund processes"
+      ]
+    },
+    "assumptions": [
+      "ISO 8583 credit indicators are consistently available from merchant processors",
+      "Notification infrastructure supports real-time delivery",
+      "Users opt in to push notifications within the Virtual Wallet experience"
+    ],
+    "raw": "{\"personas\":[{\"type\":\"primary\",\"name\":\"The High-Frequency Online Shopper\",\"goals\":[\"Know exactly when a refund is initiated so they can plan cash flow\",\"Avoid checking transaction history repeatedly\",\"Feel in control of their money during return cycles\"],\"pains\":[\"Constant uncertainty about when refunds will land\",\"Difficulty distinguishing pending vs settled credits\",\"Anxiety that funds are ‘missing’ during the return process\"],\"triggers\":[\"Returning mid- to high-value items\",\"Using BNPL services frequently\",\"Feeling cash-constrained while waiting for a refund\"],\"objections\":[\"Will this notification be accurate?\",\"Will I mistakenly think I can spend the money early?\"],\"keyMessage\":\"Know the moment your refund is initiated so you can stay in control of your cash flow.\"},{\"type\":\"secondary\",\"name\":\"The Budget-Conscious Planner\",\"goals\":[\"Predict upcoming credits to avoid overspending\",\"Track refund timing within their financial calendar\",\"Understand discrepancies in partial refunds\"],\"pains\":[\"Unexpected delays that disrupt budgeting\",\"Needing to cross-check merchant emails with banking activity\",\"Uncertainty around partial refund amounts\"],\"triggers\":[\"Monthly budgeting cycles\",\"Pending large purchases dependent on expected refunds\"],\"objections\":[\"Will the feature explain why a refund amount changed?\",\"Will this clutter my notification feed?\"],\"keyMessage\":\"See refund timing clearly so you can budget with confidence.\"}],\"messaging\":{\"positioningStatement\":\"PNC Refund Radar gives customers real-time visibility into refunds the moment merchants initiate them, removing financial uncertainty and helping users plan their cash flow with confidence.\",\"benefits\":[\"Instant reassurance with refund-initiated notifications\",\"Clear separation of pending and settled credits\",\"Full transparency with refund timelines and explanations\"],\"proofPoints\":[\"Powered by ISO 8583 credit indicators for early detection\",\"Integrated with Virtual Wallet’s Calendar for cash-flow planning\",\"Supports Reg E compliance and protects customers from premature spending\"],\"taglines\":[\"Know your refund the moment it starts.\",\"No more refund limbo.\",\"Refund clarity, instantly.\",\"See your money coming back sooner.\",\"Your refund, finally transparent.\"]},\"gtmPlan\":{\"launchGoals\":[\"Reduce refund-related customer support calls by 15% within 60 days\",\"Increase Virtual Wallet engagement and daily active users\",\"Position PNC as a leader in proactive banking transparency\"],\"channels\":[\"In-app education cards highlighting Refund Radar\",\"Push notification spotlight for early-refund detection\",\"Email campaign to high-frequency online shoppers\",\"Social and digital ads targeting Gen Z and Millennials\",\"Branch and call-center scripts for customer education\"],\"rollout\":\"Closed beta with 5% of Virtual Wallet users, followed by a phased rollout to 25%, then general availability to all eligible customers within 8 weeks.\",\"risks\":[\"Merchant-initiated credits may be reversed, leading to confusion\",\"Customers may assume pending credits are spendable\",\"Noise from excessive notifications\"]},\"releaseNotes\":{\"customerFacing\":\"Introducing PNC Refund Radar: Get notified the moment a merchant initiates a refund, even before the money posts to your account. Track pending vs settled credits and understand refund amounts with clear explanations, all integrated into your Virtual Wallet Calendar.\",\"internal\":\"Refund Radar adds early visibility into merchant-initiated credits using ISO 8583 indicators. Notifications display refund initiation without making funds available until cleared. Support teams should remind customers that pending refunds cannot be spent. Compliance review confirms adherence to Reg E timing rules.\"},\"stakeholderComms\":{\"execs\":\"Refund Radar strengthens our Virtual Wallet strategy by reducing customer uncertainty around refunds, a top driver of support calls. The feature differentiates PNC with proactive transparency and drives higher engagement for Gen Z and Millennial users. Early metrics will focus on call reduction and feature adoption.\",\"engineering\":\"Refund Radar requires ingesting ISO 8583 credit indicators to detect merchant-initiated refunds before settlement. Build a pending-credit state in the ledger and deliver a real-time push notification. Integrate the refund timeline into the Virtual Wallet Calendar. Ensure no spend-access is provided before settlement.\",\"support\":\"Customers will now receive notifications when merchants initiate refunds. These are pending and not spendable until posted. If customers ask about discrepancies (e.g., partial refunds), advise them to check the explanation in the app. Escalate only if the refund exceeds standard merchant timelines.\"},\"metrics\":{\"week1\":[\"Percentage of beta users receiving at least one refund notification\",\"Push notification open rate\",\"Early reduction in ‘Where is my refund?’ support calls\"],\"month1\":[\"15%+ reduction in refund-related support contacts\",\"Adoption rate within Virtual Wallet users\",\"Increase in Calendar view engagement\",\"Customer satisfaction score improvement for refund processes\"]},\"assumptions\":[\"ISO 8583 credit indicators are consistently available from merchant processors\",\"Notification infrastructure supports real-time delivery\",\"Users opt in to push notifications within the Virtual Wallet experience\"]}"
+  }
+}

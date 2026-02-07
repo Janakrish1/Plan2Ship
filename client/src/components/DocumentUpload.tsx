@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
 const MAX_SIZE_MB = 15;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-const ACCEPT = 'application/pdf';
+const ACCEPT = "application/pdf";
 
 interface DocumentUploadProps {
   onUpload: (file: File) => void;
@@ -19,7 +19,7 @@ export function DocumentUpload({
   const [error, setError] = useState<string | null>(null);
 
   const validate = useCallback((file: File): string | null => {
-    if (file.type !== ACCEPT) return 'Only PDF files are allowed.';
+    if (file.type !== ACCEPT) return "Only PDF files are allowed.";
     if (file.size > MAX_SIZE_BYTES) return `File must be under ${MAX_SIZE_MB} MB.`;
     return null;
   }, []);
@@ -62,7 +62,7 @@ export function DocumentUpload({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       handleFile(file ?? null);
-      e.target.value = '';
+      e.target.value = "";
     },
     [handleFile]
   );
@@ -71,8 +71,10 @@ export function DocumentUpload({
     <div className="space-y-2">
       <label
         className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 transition ${
-          dragActive ? 'border-primary-500 bg-primary-50' : 'border-gray-300 bg-gray-50'
-        } ${disabled || isUploading ? 'pointer-events-none opacity-60' : 'cursor-pointer'}`}
+          dragActive
+            ? "border-primary bg-primary/10"
+            : "border-white/10 bg-white/5 hover:border-primary/50 hover:bg-primary/5"
+        } ${disabled || isUploading ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
@@ -86,20 +88,23 @@ export function DocumentUpload({
         />
         {isUploading ? (
           <div className="flex flex-col items-center gap-2">
-            <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
-            <span className="text-gray-600">Processing document…</span>
-            <span className="text-sm text-gray-500">This may take 10–30 seconds</span>
+            <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <span className="text-muted-foreground">Processing document…</span>
+            <span className="text-sm text-muted-foreground/80">This may take 10–30 seconds</span>
           </div>
         ) : (
           <>
-            <span className="text-4xl text-primary-500 mb-2">📄</span>
-            <span className="font-medium text-gray-700">Drop your PDF here or click to browse</span>
-            <span className="text-sm text-gray-500 mt-1">Max size: {MAX_SIZE_MB} MB</span>
+            <span className="text-4xl text-primary mb-2">📄</span>
+            <span className="font-medium text-foreground">Drop your PDF here or click to browse</span>
+            <span className="text-sm text-muted-foreground mt-1">Max size: {MAX_SIZE_MB} MB</span>
           </>
         )}
       </label>
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg" role="alert">
+        <p
+          className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-lg"
+          role="alert"
+        >
           {error}
         </p>
       )}
