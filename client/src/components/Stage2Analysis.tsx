@@ -1,6 +1,9 @@
 import type { Stage2Analysis as Stage2Type, MetricsCharts } from '../types/project';
 import { StageSection } from './StageSection';
-import { getMetricsChartUrl } from '../services/api';
+import { MetricsChartFigure } from './MetricsChartFigure';
+import { SimpleDataTable } from './ui/data-table';
+import { SectionHeading, KeyValueCard, AccentCard } from './content-blocks';
+import { Layers, BookOpen, CheckSquare, AlertCircle, BarChart2 } from 'lucide-react';
 
 interface Stage2AnalysisProps {
   data: Stage2Type | undefined;
@@ -8,42 +11,14 @@ interface Stage2AnalysisProps {
   isGenerating: boolean;
   projectId?: string;
   metricsCharts?: MetricsCharts;
+  sectionId?: string;
 }
 
-function Table({ headers, rows }: { headers: string[]; rows: (string | undefined)[][] }) {
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full text-sm border border-white/10">
-        <thead>
-          <tr className="bg-white/5">
-            {headers.map((h, i) => (
-              <th key={i} className="px-3 py-2 text-left font-medium text-foreground border-b border-white/10">
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i} className="border-b border-white/5">
-              {row.map((cell, j) => (
-                <td key={j} className="px-3 py-2 text-foreground">
-                  {cell ?? '—'}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts }: Stage2AnalysisProps) {
+export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts, sectionId }: Stage2AnalysisProps) {
   if (!data) {
     return (
-      <StageSection stageNumber={2} title="Requirements & Development">
-        <p className="text-muted-foreground text-sm mb-4">
+      <StageSection id={sectionId} stageNumber={2} title="Requirements & Development">
+        <p className="text-muted-foreground text-sm mb-3">
           Epics, user stories, acceptance criteria, and backlog (MVP vs Later).
         </p>
         <button
@@ -59,25 +34,24 @@ export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metr
   }
 
   return (
-    <StageSection stageNumber={2} title="Requirements & Development" defaultOpen>
-      <div className="space-y-6">
+    <StageSection id={sectionId} stageNumber={2} title="Requirements & Development" defaultOpen>
+      <div className="space-y-5">
         {data.epics?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Epics</h4>
-            <ul className="space-y-2">
+            <SectionHeading title="Epics" icon={Layers} description="High-level feature groups" />
+            <div className="space-y-2">
               {data.epics.map((e, i) => (
-                <li key={i} className="flex gap-2">
-                  <span className="font-medium text-foreground">{e.name}:</span>
-                  <span className="text-muted-foreground">{e.description}</span>
-                </li>
+                <AccentCard key={i} title={e.name} accentColor="primary">
+                  {e.description}
+                </AccentCard>
               ))}
-            </ul>
+            </div>
           </div>
         ) : null}
         {data.userStories?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">User Stories</h4>
-            <Table
+            <SectionHeading title="User Stories" icon={BookOpen} />
+            <SimpleDataTable
               headers={['Story', 'Epic', 'Priority', 'Effort', 'Dependencies']}
               rows={data.userStories.map((u) => [u.story, u.epic, u.priority, u.effort, u.dependencies])}
             />
@@ -85,45 +59,40 @@ export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {data.acceptanceCriteria?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Acceptance Criteria</h4>
-            <ul className="space-y-3">
+            <SectionHeading title="Acceptance Criteria" icon={CheckSquare} />
+            <div className="space-y-3">
               {data.acceptanceCriteria.map((ac, i) => (
-                <li key={i}>
-                  <span className="text-muted-foreground font-medium">{ac.storyRef}</span>
-                  <ul className="list-disc list-inside mt-1 text-muted-foreground text-sm">
+                <AccentCard key={i} title={ac.storyRef} accentColor="secondary">
+                  <ul className="list-disc list-inside space-y-0.5">
                     {ac.criteria?.map((c, j) => (
                       <li key={j}>{c}</li>
                     ))}
                   </ul>
-                </li>
+                </AccentCard>
               ))}
-            </ul>
+            </div>
           </div>
         ) : null}
         {data.mvpVsLater ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-medium text-foreground mb-2">MVP (ship first)</h4>
-              <ul className="list-disc list-inside text-muted-foreground text-sm">
-                {data.mvpVsLater.mvp?.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-foreground mb-2">Later</h4>
-              <ul className="list-disc list-inside text-muted-foreground text-sm">
-                {data.mvpVsLater.later?.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ul>
-            </div>
+            <KeyValueCard
+              title="MVP (ship first)"
+              subtitle="Priority scope for launch"
+              items={data.mvpVsLater.mvp}
+              variant="primary"
+            />
+            <KeyValueCard
+              title="Later"
+              subtitle="Backlog for future releases"
+              items={data.mvpVsLater.later}
+              variant="muted"
+            />
           </div>
         ) : null}
         {data.assumptions?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Assumptions</h4>
-            <ul className="list-disc list-inside text-muted-foreground text-sm">
+            <SectionHeading title="Assumptions" icon={AlertCircle} />
+            <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
               {data.assumptions.map((a, i) => (
                 <li key={i}>{a}</li>
               ))}
@@ -132,17 +101,10 @@ export function Stage2Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {projectId && metricsCharts?.stage2?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Backlog metrics</h4>
-            <p className="text-muted-foreground text-sm mb-3">Priority, effort, and MVP vs Later distribution.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <SectionHeading title="Backlog metrics" icon={BarChart2} description="Priority, effort, and MVP vs Later distribution." />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
               {metricsCharts.stage2.map((filename) => (
-                <figure key={filename} className="rounded-lg border border-white/10 overflow-hidden bg-card/40">
-                  <img
-                    src={getMetricsChartUrl(projectId, filename)}
-                    alt={filename.replace('.png', '').replace(/-/g, ' ')}
-                    className="w-full h-auto"
-                  />
-                </figure>
+                <MetricsChartFigure key={filename} projectId={projectId} filename={filename} />
               ))}
             </div>
           </div>

@@ -61,7 +61,7 @@ export function CreateProjectDialog({ children }: { children: React.ReactNode })
         <DialogHeader>
           <DialogTitle className="text-xl font-display">Start New Project</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-3">
           <div className="space-y-2">
             <Label htmlFor="file-upload" className="text-muted-foreground">
               Upload Plan Document (PDF)

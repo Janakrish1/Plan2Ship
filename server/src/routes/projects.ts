@@ -57,6 +57,7 @@ router.get('/', async (_req: Request, res: Response) => {
             createdAt: p.createdAt,
             currentStage: p.currentStage,
             thumbnail: p.thumbnail,
+            summary: p.summary,
           });
         } catch {
           // skip invalid

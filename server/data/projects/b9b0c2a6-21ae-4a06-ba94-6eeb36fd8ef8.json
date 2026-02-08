@@ -1,6 +1,6 @@
 {
   "id": "b9b0c2a6-21ae-4a06-ba94-6eeb36fd8ef8",
-  "title": "PNC Refund Radar",
+  "title": "PNC Refund Radar Inc",
   "createdAt": "2026-02-07T23:26:53.175Z",
   "currentStage": 5,
   "pdfPath": "uploads/b9b0c2a6-21ae-4a06-ba94-6eeb36fd8ef8/PM_Startup.pdf",
@@ -504,7 +504,8 @@
           "Tap to view refund status",
           "Processing started",
           "Updated just now"
-        ]
+        ],
+        "imagePath": "wireframes/screen-0-1770511154320.png"
       },
       {
         "screenName": "Refund Detail",
@@ -558,7 +559,8 @@
           "Estimated credit date",
           "Return to Wallet",
           "View refund details"
-        ]
+        ],
+        "imagePath": "wireframes/screen-3-1770511493994.png"
       },
       {
         "screenName": "Refund Settled Confirmation",

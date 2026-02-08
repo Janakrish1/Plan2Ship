@@ -1,6 +1,8 @@
 import type { Stage5Analysis as Stage5Type, MetricsCharts } from '../types/project';
 import { StageSection } from './StageSection';
-import { getMetricsChartUrl } from '../services/api';
+import { MetricsChartFigure } from './MetricsChartFigure';
+import { SectionHeading, InsightCard, GTMPlanBlock, AccentCard } from './content-blocks';
+import { Users, MessageCircle, Calendar, FileText, Megaphone, BarChart2 } from 'lucide-react';
 
 interface Stage5AnalysisProps {
   data: Stage5Type | undefined;
@@ -8,13 +10,14 @@ interface Stage5AnalysisProps {
   isGenerating: boolean;
   projectId?: string;
   metricsCharts?: MetricsCharts;
+  sectionId?: string;
 }
 
-export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts }: Stage5AnalysisProps) {
+export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metricsCharts, sectionId }: Stage5AnalysisProps) {
   if (!data) {
     return (
-      <StageSection stageNumber={5} title="Go-to-Market Execution">
-        <p className="text-muted-foreground text-sm mb-4">
+      <StageSection id={sectionId} stageNumber={5} title="Go-to-Market Execution">
+        <p className="text-muted-foreground text-sm mb-3">
           Personas, messaging, GTM plan, release notes, and stakeholder comms.
         </p>
         <button
@@ -30,61 +33,59 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
   }
 
   return (
-    <StageSection stageNumber={5} title="Go-to-Market Execution" defaultOpen>
-      <div className="space-y-6">
+    <StageSection id={sectionId} stageNumber={5} title="Go-to-Market Execution" defaultOpen>
+      <div className="space-y-5">
         {data.personas?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Personas</h4>
-            <div className="space-y-4">
+            <SectionHeading title="Personas" icon={Users} description="Target audiences and key messages" />
+            <div className="space-y-3">
               {data.personas.map((p, i) => (
-                <div key={i} className="border border-white/10 rounded-lg p-4 bg-card/40">
-                  <div className="font-medium text-foreground capitalize">{p.type}</div>
-                  {p.name && <p className="text-muted-foreground text-sm">{p.name}</p>}
-                  {p.keyMessage && <p className="text-primary text-sm mt-1">Key message: {p.keyMessage}</p>}
-                  {p.goals?.length ? <p className="text-sm mt-2"><span className="font-medium">Goals:</span> {p.goals.join('; ')}</p> : null}
+                <AccentCard key={i} title={p.type} subtitle={p.name} accentColor="primary">
+                  {p.keyMessage && <p className="text-primary text-sm font-medium">Key message: {p.keyMessage}</p>}
+                  {p.goals?.length ? <p className="text-sm mt-1"><span className="font-medium">Goals:</span> {p.goals.join('; ')}</p> : null}
                   {p.pains?.length ? <p className="text-sm"><span className="font-medium">Pains:</span> {p.pains.join('; ')}</p> : null}
                   {p.objections?.length ? <p className="text-sm"><span className="font-medium">Objections:</span> {p.objections.join('; ')}</p> : null}
-                </div>
+                </AccentCard>
               ))}
             </div>
           </div>
         ) : null}
         {data.messaging ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Messaging</h4>
+            <SectionHeading title="Messaging" icon={MessageCircle} description="Positioning and proof points" />
             {data.messaging.positioningStatement && (
-              <p className="text-foreground italic mb-2">"{data.messaging.positioningStatement}"</p>
+              <InsightCard variant="primary" className="mb-3">
+                <p className="text-foreground italic text-sm">"{data.messaging.positioningStatement}"</p>
+              </InsightCard>
             )}
             {data.messaging.benefits?.length ? (
-              <p className="text-sm"><span className="font-medium">Benefits:</span> {data.messaging.benefits.join('; ')}</p>
+              <p className="text-sm"><span className="font-medium text-foreground">Benefits:</span> <span className="text-muted-foreground">{data.messaging.benefits.join('; ')}</span></p>
             ) : null}
             {data.messaging.proofPoints?.length ? (
-              <p className="text-sm mt-1"><span className="font-medium">Proof points:</span> {data.messaging.proofPoints.join('; ')}</p>
+              <p className="text-sm mt-1"><span className="font-medium text-foreground">Proof points:</span> <span className="text-muted-foreground">{data.messaging.proofPoints.join('; ')}</span></p>
             ) : null}
             {data.messaging.taglines?.length ? (
-              <p className="text-sm mt-2"><span className="font-medium">Taglines:</span> {data.messaging.taglines.join(' | ')}</p>
+              <p className="text-sm mt-2"><span className="font-medium text-foreground">Taglines:</span> <span className="text-primary">{data.messaging.taglines.join(' | ')}</span></p>
             ) : null}
           </div>
         ) : null}
         {data.gtmPlan && Object.keys(data.gtmPlan).length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">GTM Plan</h4>
-            <pre className="text-sm text-foreground bg-white/5 border border-white/10 p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
-              {JSON.stringify(data.gtmPlan, null, 2)}
-            </pre>
+            <SectionHeading title="GTM Plan" icon={Calendar} description="Launch goals, channels, rollout, and risks" />
+            <GTMPlanBlock plan={data.gtmPlan} />
           </div>
         ) : null}
         {data.releaseNotes ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {data.releaseNotes.customerFacing && (
-              <div>
-                <h4 className="font-medium text-foreground mb-2">Release notes (customer)</h4>
+              <div className="rounded-xl border border-white/10 bg-card/30 p-4">
+                <h4 className="font-semibold text-foreground text-sm mb-2">Release notes (customer)</h4>
                 <p className="text-muted-foreground text-sm whitespace-pre-wrap">{data.releaseNotes.customerFacing}</p>
               </div>
             )}
             {data.releaseNotes.internal && (
-              <div>
-                <h4 className="font-medium text-foreground mb-2">Release notes (internal)</h4>
+              <div className="rounded-xl border border-white/10 bg-card/30 p-4">
+                <h4 className="font-semibold text-foreground text-sm mb-2">Release notes (internal)</h4>
                 <p className="text-muted-foreground text-sm whitespace-pre-wrap">{data.releaseNotes.internal}</p>
               </div>
             )}
@@ -92,25 +93,22 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {data.stakeholderComms ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Stakeholder Communication</h4>
-            <div className="space-y-3">
+            <SectionHeading title="Stakeholder Communication" icon={Megaphone} />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {data.stakeholderComms.execs && (
-                <div>
-                  <span className="font-medium text-foreground text-sm">Execs:</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.execs}</p>
-                </div>
+                <AccentCard title="Execs" accentColor="primary">
+                  <p className="whitespace-pre-wrap">{data.stakeholderComms.execs}</p>
+                </AccentCard>
               )}
               {data.stakeholderComms.engineering && (
-                <div>
-                  <span className="font-medium text-foreground text-sm">Engineering/Design:</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.engineering}</p>
-                </div>
+                <AccentCard title="Engineering / Design" accentColor="secondary">
+                  <p className="whitespace-pre-wrap">{data.stakeholderComms.engineering}</p>
+                </AccentCard>
               )}
               {data.stakeholderComms.support && (
-                <div>
-                  <span className="font-medium text-foreground text-sm">Support:</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">{data.stakeholderComms.support}</p>
-                </div>
+                <AccentCard title="Support" accentColor="muted">
+                  <p className="whitespace-pre-wrap">{data.stakeholderComms.support}</p>
+                </AccentCard>
               )}
             </div>
           </div>
@@ -118,9 +116,9 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         {data.metrics ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {data.metrics.week1?.length ? (
-              <div>
-                <h4 className="font-medium text-foreground mb-2">Week 1 metrics</h4>
-                <ul className="list-disc list-inside text-muted-foreground text-sm">
+              <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <h4 className="font-semibold text-foreground text-sm mb-2">Week 1 metrics</h4>
+                <ul className="list-disc list-inside text-muted-foreground text-sm space-y-0.5">
                   {data.metrics.week1.map((m, i) => (
                     <li key={i}>{m}</li>
                   ))}
@@ -128,9 +126,9 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
               </div>
             ) : null}
             {data.metrics.month1?.length ? (
-              <div>
-                <h4 className="font-medium text-foreground mb-2">Month 1 metrics</h4>
-                <ul className="list-disc list-inside text-muted-foreground text-sm">
+              <div className="rounded-xl border border-white/10 bg-card/30 p-4">
+                <h4 className="font-semibold text-foreground text-sm mb-2">Month 1 metrics</h4>
+                <ul className="list-disc list-inside text-muted-foreground text-sm space-y-0.5">
                   {data.metrics.month1.map((m, i) => (
                     <li key={i}>{m}</li>
                   ))}
@@ -141,17 +139,10 @@ export function Stage5Analysis({ data, onGenerate, isGenerating, projectId, metr
         ) : null}
         {projectId && metricsCharts?.stage5?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">GTM metrics (charts)</h4>
-            <p className="text-muted-foreground text-sm mb-3">Persona mix and success metrics distribution.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SectionHeading title="GTM metrics (charts)" icon={BarChart2} description="Persona mix and success metrics distribution." />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
               {metricsCharts.stage5.map((filename) => (
-                <figure key={filename} className="rounded-lg border border-white/10 overflow-hidden bg-card/40">
-                  <img
-                    src={getMetricsChartUrl(projectId, filename)}
-                    alt={filename.replace('.png', '').replace(/-/g, ' ')}
-                    className="w-full h-auto"
-                  />
-                </figure>
+                <MetricsChartFigure key={filename} projectId={projectId} filename={filename} />
               ))}
             </div>
           </div>

@@ -71,68 +71,99 @@ export function HomePage() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+    <motion.div
+      className="flex flex-col gap-4"
+      initial="hidden"
+      animate="visible"
+      variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 flex-wrap">
+        <div className="min-w-0 flex flex-col gap-0.5">
+          <motion.h1
+            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="text-2xl md:text-3xl font-display font-bold text-white"
+          >
             Your projects
-          </h1>
-          <p className="text-muted-foreground">Manage and track your product lifecycle.</p>
+          </motion.h1>
+          <motion.p
+            variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.4, delay: 0.05 }}
+            className="text-muted-foreground text-sm"
+          >
+            Manage and track your product lifecycle.
+          </motion.p>
         </div>
-        <CreateProjectDialog>
-          <Button className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-primary/25">
-            New Project
-          </Button>
-        </CreateProjectDialog>
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="relative flex-1 min-w-[200px] max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <motion.div
+          className="flex items-center gap-2 flex-1 sm:flex-initial sm:max-w-xs"
+          variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
+          transition={{ duration: 0.35, delay: 0.1 }}
+        >
+          <div className="relative flex-1 min-w-0 group/search">
+            <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none group-hover/search:text-primary transition-colors" />
             <input
               type="text"
-              placeholder="Search projects..."
+              placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-card/40 border border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+              className="w-full bg-card/40 border border-white/5 rounded-lg pl-8 pr-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
             />
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <CreateProjectDialog>
-            <div className="glass-card rounded-2xl p-6 min-h-[200px] flex flex-col items-center justify-center border-2 border-dashed border-white/10 hover:border-primary/30 cursor-pointer group">
-              <span className="text-4xl text-muted-foreground group-hover:text-primary mb-2 transition-colors">+</span>
-              <span className="font-medium text-muted-foreground group-hover:text-foreground">Add Project</span>
-              <span className="text-sm text-muted-foreground/80 mt-1">Upload a PDF to get started</span>
-            </div>
+            <Button className="bg-primary hover:bg-primary/90 active:scale-[0.98] text-white text-sm font-medium px-4 py-2 rounded-lg shadow-lg shadow-primary/25 shrink-0 transition-transform duration-150 hover:scale-[1.02]">
+              New
+            </Button>
+          </CreateProjectDialog>
+        </motion.div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <CreateProjectDialog>
+            <motion.div
+              variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }}
+              transition={{ duration: 0.35, delay: 0.08 }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              whileTap={{ scale: 0.98 }}
+              className="glass-card rounded-xl p-4 min-h-[140px] flex flex-col items-center justify-center border-2 border-dashed border-white/10 hover:border-primary/40 cursor-pointer group animate-border-glow"
+            >
+              <span className="text-3xl text-muted-foreground group-hover:text-primary mb-1 transition-transform duration-200 group-hover:scale-125">+</span>
+              <span className="font-medium text-sm text-muted-foreground group-hover:text-foreground">Add Project</span>
+              <span className="text-xs text-muted-foreground/80 mt-0.5">Upload a PDF</span>
+            </motion.div>
           </CreateProjectDialog>
 
           {loading ? (
             Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="glass-card rounded-2xl p-6 h-48 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <Skeleton className="h-6 w-3/4 bg-white/5" />
-                  <Skeleton className="h-4 w-full bg-white/5" />
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="glass-card rounded-xl p-4 h-36 flex flex-col justify-between"
+              >
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-3/4 bg-white/5" />
+                  <Skeleton className="h-3 w-full bg-white/5" />
                 </div>
-                <Skeleton className="h-8 w-1/4 bg-white/5" />
-              </div>
+                <Skeleton className="h-6 w-1/4 bg-white/5" />
+              </motion.div>
             ))
           ) : (
             filteredProjects.map((project, i) => (
               <Link key={project.id} to={`/project/${project.id}`}>
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="glass-card rounded-2xl p-6 group cursor-pointer h-full flex flex-col relative overflow-hidden"
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.2 } }}
+                  whileTap={{ scale: 0.99 }}
+                  className="glass-card rounded-xl p-4 group cursor-pointer h-full flex flex-col relative overflow-hidden"
                 >
-                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                      <Rocket className="w-5 h-5" />
-                    </div>
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-secondary opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                  <div className="flex justify-between items-start mb-2">
+                    <motion.div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors" whileHover={{ rotate: [0, -8, 8, 0], transition: { duration: 0.4 } }}>
+                      <Rocket className="w-4 h-4" />
+                    </motion.div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button
@@ -167,13 +198,13 @@ export function HomePage() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                  <h3 className="text-base font-bold text-white mb-1 group-hover:text-primary transition-colors line-clamp-1">
                     {project.title || "Untitled"}
                   </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-6 flex-1">
+                  <p className="text-xs text-muted-foreground line-clamp-3 mb-3 flex-1">
                     {project.summary || "No summary available."}
                   </p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto border-t border-white/5 pt-4">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto border-t border-white/5 pt-2">
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
                       <span>
@@ -193,11 +224,14 @@ export function HomePage() {
         </div>
 
         {!loading && filteredProjects.length === 0 && projects.length > 0 && (
-          <div className="text-center py-12 text-muted-foreground">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-6 text-muted-foreground text-sm col-span-full"
+          >
             No projects match your search.
-          </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+    </motion.div>
   );
 }

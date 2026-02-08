@@ -2,6 +2,10 @@ import { useState } from 'react';
 import type { Stage4Analysis as Stage4Type, Project } from '../types/project';
 import { StageSection } from './StageSection';
 import { generateWireframeImage, getWireframeImageUrl } from '../services/api';
+import { useImageLightbox } from './ImageLightbox';
+import { DataTable } from './ui/data-table';
+import { SectionHeading, AccentCard, InsightCard } from './content-blocks';
+import { GitBranch, Layout, FileText, TestTube, RefreshCw } from 'lucide-react';
 
 interface Stage4AnalysisProps {
   data: Stage4Type | undefined;
@@ -9,6 +13,7 @@ interface Stage4AnalysisProps {
   isGenerating: boolean;
   projectId?: string;
   onProjectUpdate?: (project: Project) => void;
+  sectionId?: string;
 }
 
 export function Stage4Analysis({
@@ -17,8 +22,10 @@ export function Stage4Analysis({
   isGenerating,
   projectId,
   onProjectUpdate,
+  sectionId,
 }: Stage4AnalysisProps) {
   const [generatingImageIndex, setGeneratingImageIndex] = useState<number | null>(null);
+  const { openLightbox } = useImageLightbox();
 
   const handleGenerateMockup = async (index: number) => {
     if (!projectId || !onProjectUpdate) return;
@@ -35,8 +42,8 @@ export function Stage4Analysis({
 
   if (!data) {
     return (
-      <StageSection stageNumber={4} title="Prototyping & Testing">
-        <p className="text-muted-foreground text-sm mb-4">
+      <StageSection id={sectionId} stageNumber={4} title="Prototyping & Testing">
+        <p className="text-muted-foreground text-sm mb-3">
           User flows, text wireframes, usability test script, test cases, and iteration.
         </p>
         <button
@@ -59,14 +66,11 @@ export function Stage4Analysis({
       : [];
 
   return (
-    <StageSection stageNumber={4} title="Prototyping & Testing" defaultOpen>
-      <div className="space-y-6">
+    <StageSection id={sectionId} stageNumber={4} title="Prototyping & Testing" defaultOpen>
+      <div className="space-y-5">
         {data.userFlow ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">User Flow</h4>
-            {data.userFlow.description && (
-              <p className="text-muted-foreground text-sm mb-2">{data.userFlow.description}</p>
-            )}
+            <SectionHeading title="User Flow" icon={GitBranch} description={data.userFlow.description} />
             {data.userFlow.entryPoints?.length ? (
               <p className="text-sm">
                 <span className="font-medium text-foreground">Entry points:</span>{' '}
@@ -84,19 +88,17 @@ export function Stage4Analysis({
         ) : null}
         {data.wireframes?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Wireframes & mockups</h4>
-            <div className="space-y-4">
+            <SectionHeading title="Wireframes & mockups" icon={Layout} description="Screens and components" />
+            <div className="space-y-3">
               {data.wireframes.map((w, i) => (
-                <div key={i} className="border border-white/10 rounded-lg p-4 bg-card/40">
-                  <div className="font-medium text-foreground">{w.screenName}</div>
-                  <p className="text-muted-foreground text-sm mt-1">{w.purpose}</p>
+                <AccentCard key={i} title={w.screenName} subtitle={w.purpose} accentColor="primary">
                   {w.components?.length ? (
-                    <p className="text-sm mt-2">
+                    <p className="text-sm">
                       <span className="font-medium">Components:</span> {w.components.join(', ')}
                     </p>
                   ) : null}
                   {w.microcopy?.length ? (
-                    <ul className="text-sm text-muted-foreground mt-2 list-disc list-inside">
+                    <ul className="text-sm text-muted-foreground mt-1 list-disc list-inside">
                       {w.microcopy.map((m, j) => (
                         <li key={j}>{m}</li>
                       ))}
@@ -109,7 +111,11 @@ export function Stage4Analysis({
                           <img
                             src={getWireframeImageUrl(projectId, w.imagePath)}
                             alt={`Mockup: ${w.screenName}`}
-                            className="max-w-full rounded-lg border border-white/10 shadow-sm max-h-96 object-contain"
+                            className="max-w-full rounded-lg border border-white/10 shadow-sm max-h-96 object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => openLightbox(getWireframeImageUrl(projectId, w.imagePath!), `Mockup: ${w.screenName}`)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === 'Enter' && openLightbox(getWireframeImageUrl(projectId, w.imagePath!), `Mockup: ${w.screenName}`)}
                           />
                           <button
                             type="button"
@@ -132,14 +138,14 @@ export function Stage4Analysis({
                       )}
                     </div>
                   ) : null}
-                </div>
+                </AccentCard>
               ))}
             </div>
           </div>
         ) : null}
         {scriptList.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Usability Test Script</h4>
+            <SectionHeading title="Usability Test Script" icon={FileText} />
             <ul className="space-y-2">
               {scriptList.map((s, i) => (
                 <li key={i}>
@@ -152,42 +158,36 @@ export function Stage4Analysis({
         ) : null}
         {data.testCases?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Test Cases</h4>
+            <SectionHeading title="Test Cases" icon={TestTube} />
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm border border-white/10">
-                <thead>
-                  <tr className="bg-white/5">
-                    <th className="px-3 py-2 text-left font-medium text-foreground">Case</th>
-                    <th className="px-3 py-2 text-left font-medium text-foreground">Steps</th>
-                    <th className="px-3 py-2 text-left font-medium text-foreground">Expected</th>
-                    <th className="px-3 py-2 text-left font-medium text-foreground">Priority</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.testCases.map((t, i) => (
-                    <tr key={i} className="border-b border-white/5">
-                      <td className="px-3 py-2">{t.case}</td>
-                      <td className="px-3 py-2 text-muted-foreground">{t.steps}</td>
-                      <td className="px-3 py-2 text-muted-foreground">{t.expectedResult}</td>
-                      <td className="px-3 py-2">{t.priority}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <DataTable
+                columns={[
+                  { key: 'case', label: 'Case', highlight: true },
+                  { key: 'steps', label: 'Steps' },
+                  { key: 'expectedResult', label: 'Expected' },
+                  { key: 'priority', label: 'Priority' },
+                ]}
+                rows={data.testCases.map((t) => ({
+                  case: t.case,
+                  steps: t.steps,
+                  expectedResult: t.expectedResult,
+                  priority: t.priority,
+                }))}
+              />
             </div>
           </div>
         ) : null}
         {data.iteration?.length ? (
           <div>
-            <h4 className="font-medium text-foreground mb-2">Iteration (Feedback → Change)</h4>
-            <ul className="space-y-2">
+            <SectionHeading title="Iteration (Feedback → Change)" icon={RefreshCw} />
+            <div className="space-y-2">
               {data.iteration.map((it, i) => (
-                <li key={i} className="border-l-2 border-primary/30 pl-3">
+                <InsightCard key={i} variant="muted">
                   <p className="text-muted-foreground text-sm">{it.feedback}</p>
-                  <p className="text-foreground text-sm mt-1 font-medium">→ {it.change}</p>
-                </li>
+                  <p className="text-primary text-sm mt-1 font-medium">→ {it.change}</p>
+                </InsightCard>
               ))}
-            </ul>
+            </div>
           </div>
         ) : null}
       </div>

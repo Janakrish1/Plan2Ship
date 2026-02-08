@@ -13,10 +13,12 @@ import { Stage3Analysis } from "../components/Stage3Analysis";
 import { Stage4Analysis } from "../components/Stage4Analysis";
 import { Stage5Analysis } from "../components/Stage5Analysis";
 import { StageSection } from "../components/StageSection";
-import { StageIndicator } from "../components/StageIndicator";
+import { StageStepperNav } from "../components/StageStepperNav";
+import { WebGLBackground } from "../components/WebGLBackground";
 import type { Project, Stage1Analysis as Stage1AnalysisType } from "../types/project";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Rocket, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +27,7 @@ export function ProjectDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generatingStage, setGeneratingStage] = useState<2 | 3 | 4 | 5 | null>(null);
+  const [activeStage, setActiveStage] = useState(1);
 
   useEffect(() => {
     if (!id) return;
@@ -33,6 +36,12 @@ export function ProjectDetailPage() {
       .catch((e) => setError(e instanceof Error ? e.message : "Failed to load project"))
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    if (project?.currentStage && activeStage > project.currentStage) {
+      setActiveStage(project.currentStage);
+    }
+  }, [project?.currentStage]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -69,6 +78,7 @@ export function ProjectDetailPage() {
     try {
       const updated = await runStageAnalysis(id, stage);
       setProject(updated);
+      setActiveStage(stage);
     } catch (e) {
       alert(e instanceof Error ? e.message : `Stage ${stage} analysis failed`);
     } finally {
@@ -78,9 +88,17 @@ export function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px]">
-        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      </div>
+      <motion.div
+        className="flex items-center justify-center min-h-[300px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <motion.div
+          className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+        />
+      </motion.div>
     );
   }
 
@@ -96,89 +114,187 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20">
-      <div className="flex items-center justify-between">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to projects</span>
-        </Link>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={handleDelete}
-          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-        >
-          Delete project
-        </Button>
-      </div>
+    <motion.div
+      className="relative min-h-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <WebGLBackground />
 
-      <div className="glass-panel p-8 rounded-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+      <div className="relative z-10 max-w-5xl mx-auto px-3 sm:px-4 pb-4">
+        <motion.div
+          className="flex items-center justify-between py-1.5"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+        >
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Back to projects</span>
+          </Link>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleDelete}
+            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            Delete project
+          </Button>
+        </motion.div>
+
+        <motion.div
+          className="relative overflow-hidden mb-3 rounded-2xl border border-white/10 bg-gradient-to-br from-card/80 to-card/40 shadow-xl"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.06 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/5" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-primary/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-glow-pulse" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+          <div className="relative z-10 p-4 md:p-5">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold">
+                <Rocket className="w-3.5 h-3.5" />
+                Stage {project.currentStage ?? 1} of 5
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-muted-foreground text-xs">
+                <Sparkles className="w-3 h-3" />
+                Plan2Ship
+              </span>
+            </div>
+            <h1 className="text-xl md:text-2xl font-display font-bold text-white drop-shadow-sm">
               {project.title || "Untitled"}
             </h1>
-            <StageIndicator currentStage={project.currentStage} />
+            {project.summary && (
+              <p className="text-foreground/80 text-sm mt-2 line-clamp-3 leading-relaxed">
+                {project.summary}
+              </p>
+            )}
           </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.1 }}
+        >
+            <StageStepperNav
+            currentStage={project.currentStage}
+            activeStage={activeStage}
+            onStageChange={setActiveStage}
+          />
+        </motion.div>
+
+        <div className="mt-3 min-h-[240px]">
+          <AnimatePresence mode="wait">
+            {activeStage === 1 && (
+              <motion.div
+                key="stage-1"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                className="rounded-xl overflow-hidden bg-card/40 border border-white/10"
+              >
+                <StageSection stageNumber={1} title="Strategy & Ideation" defaultOpen>
+                  {project.stage1Analysis ? (
+                    <Stage1Analysis
+                      project={project}
+                      onSave={handleSave}
+                      onBrainstorm={handleBrainstorm}
+                    />
+                  ) : (
+                    <p className="text-muted-foreground text-sm p-3">
+                      Stage 1 is generated when you upload a PDF. Re-upload or create a new project to run Stage 1.
+                    </p>
+                  )}
+                </StageSection>
+              </motion.div>
+            )}
+
+            {activeStage === 2 && (
+              <motion.div
+                key="stage-2"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              >
+                <Stage2Analysis
+                  sectionId="stage-2"
+                  data={project.stage2Analysis}
+                  onGenerate={() => handleGenerateStage(2)}
+                  isGenerating={generatingStage === 2}
+                  projectId={id}
+                  metricsCharts={project.metricsCharts}
+                />
+              </motion.div>
+            )}
+
+            {activeStage === 3 && (
+              <motion.div
+                key="stage-3"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              >
+                <Stage3Analysis
+                  sectionId="stage-3"
+                  data={project.stage3Analysis}
+                  onGenerate={() => handleGenerateStage(3)}
+                  isGenerating={generatingStage === 3}
+                  projectId={id}
+                  metricsCharts={project.metricsCharts}
+                />
+              </motion.div>
+            )}
+
+            {activeStage === 4 && (
+              <motion.div
+                key="stage-4"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              >
+                <Stage4Analysis
+                  sectionId="stage-4"
+                  data={project.stage4Analysis}
+                  onGenerate={() => handleGenerateStage(4)}
+                  isGenerating={generatingStage === 4}
+                  projectId={id}
+                  onProjectUpdate={setProject}
+                />
+              </motion.div>
+            )}
+
+            {activeStage === 5 && (
+              <motion.div
+                key="stage-5"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              >
+                <Stage5Analysis
+                  sectionId="stage-5"
+                  data={project.stage5Analysis}
+                  onGenerate={() => handleGenerateStage(5)}
+                  isGenerating={generatingStage === 5}
+                  projectId={id}
+                  metricsCharts={project.metricsCharts}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        {project.summary && (
-          <div className="relative z-10 mt-4 rounded-lg bg-white/5 border border-white/10 p-4">
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Summary</h3>
-            <p className="text-foreground/90 text-sm">{project.summary}</p>
-          </div>
-        )}
       </div>
-
-      <div className="space-y-4">
-        <StageSection stageNumber={1} title="Strategy & Ideation" defaultOpen>
-          {project.stage1Analysis ? (
-            <Stage1Analysis
-              project={project}
-              onSave={handleSave}
-              onBrainstorm={handleBrainstorm}
-            />
-          ) : (
-            <p className="text-muted-foreground text-sm">
-              Stage 1 is generated when you upload a PDF. Re-upload or create a new project to run
-              Stage 1.
-            </p>
-          )}
-        </StageSection>
-
-        <Stage2Analysis
-          data={project.stage2Analysis}
-          onGenerate={() => handleGenerateStage(2)}
-          isGenerating={generatingStage === 2}
-          projectId={id}
-          metricsCharts={project.metricsCharts}
-        />
-        <Stage3Analysis
-          data={project.stage3Analysis}
-          onGenerate={() => handleGenerateStage(3)}
-          isGenerating={generatingStage === 3}
-          projectId={id}
-          metricsCharts={project.metricsCharts}
-        />
-        <Stage4Analysis
-          data={project.stage4Analysis}
-          onGenerate={() => handleGenerateStage(4)}
-          isGenerating={generatingStage === 4}
-          projectId={id}
-          onProjectUpdate={setProject}
-        />
-        <Stage5Analysis
-          data={project.stage5Analysis}
-          onGenerate={() => handleGenerateStage(5)}
-          isGenerating={generatingStage === 5}
-          projectId={id}
-          metricsCharts={project.metricsCharts}
-        />
-      </div>
-    </div>
+    </motion.div>
   );
 }

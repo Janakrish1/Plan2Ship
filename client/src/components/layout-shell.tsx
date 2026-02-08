@@ -1,12 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, FolderKanban, Plus, Rocket } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Plus, Rocket, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CreateProjectDialog } from "@/components/ui/create-project-dialog";
 
+const SIDEBAR_WIDTH_EXPANDED = "w-72";
+const SIDEBAR_WIDTH_COLLAPSED = "w-20";
+const MAIN_PL_EXPANDED = "lg:pl-72";
+const MAIN_PL_COLLAPSED = "lg:pl-20";
+
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const navigation = [
     { name: "Projects", href: "/", icon: FolderKanban },
@@ -15,18 +21,28 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
-      {/* Sidebar for Desktop */}
-      <aside className="hidden lg:flex w-72 flex-col fixed inset-y-0 z-50 border-r border-white/5 bg-card/30 backdrop-blur-xl">
-        <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+      {/* Sidebar for Desktop - collapsible */}
+      <aside
+        className={cn(
+          "hidden lg:flex flex-col fixed inset-y-0 z-50 border-r border-white/5 bg-card/30 backdrop-blur-xl transition-[width] duration-300 ease-in-out overflow-hidden",
+          isSidebarCollapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED
+        )}
+      >
+        <Link
+          to="/"
+          className={cn("flex items-center gap-3 shrink-0 border-b border-white/5 hover:opacity-90 transition-opacity", isSidebarCollapsed ? "p-2.5 justify-center" : "p-5")}
+        >
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
             <Rocket className="w-6 h-6 text-white" />
           </div>
-          <Link to="/" className="font-display font-bold text-2xl tracking-tight text-foreground hover:opacity-90">
-            Plan<span className="text-primary">2</span>Ship
-          </Link>
-        </div>
+          {!isSidebarCollapsed && (
+            <span className="font-display font-bold text-2xl tracking-tight text-foreground whitespace-nowrap">
+              Plan<span className="text-primary">2</span>Ship
+            </span>
+          )}
+        </Link>
 
-        <nav className="flex-1 px-4 space-y-2 mt-4">
+        <nav className={cn("flex-1 space-y-1 mt-2", isSidebarCollapsed ? "px-2" : "px-3")}>
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
             if (item.isCreate) {
@@ -35,12 +51,13 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
                   <button
                     type="button"
                     className={cn(
-                      "flex w-full items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-left",
+"flex w-full items-center rounded-xl transition-all duration-200 group text-left",
+                    isSidebarCollapsed ? "justify-center p-2.5" : "gap-2.5 px-3 py-2.5",
                       "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                     )}
                   >
-                    <item.icon className="w-5 h-5" />
-                    <span className="font-medium">{item.name}</span>
+                    <item.icon className="w-5 h-5 shrink-0" />
+                    {!isSidebarCollapsed && <span className="font-medium">{item.name}</span>}
                   </button>
                 </CreateProjectDialog>
               );
@@ -50,27 +67,32 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                  "flex items-center rounded-xl transition-all duration-200 group",
+                  isSidebarCollapsed ? "justify-center p-2.5" : "gap-2.5 px-3 py-2.5",
                   isActive
                     ? "bg-primary/10 text-primary border border-primary/20 shadow-lg shadow-primary/5"
                     : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                 )}
               >
-                <item.icon className={cn("w-5 h-5", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
-                <span className="font-medium">{item.name}</span>
+                <item.icon className={cn("w-5 h-5 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
+                {!isSidebarCollapsed && <span className="font-medium">{item.name}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-6 border-t border-white/5">
-          <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-white/5">
-            <h4 className="font-semibold text-sm mb-1 text-white">Pro Plan</h4>
-            <p className="text-xs text-muted-foreground mb-3">Unlock advanced AI analysis</p>
-            <button type="button" className="w-full py-2 bg-white/10 hover:bg-white/15 rounded-lg text-xs font-semibold transition-colors">
-              Upgrade Now
-            </button>
-          </div>
+        <div className="p-2 border-t border-white/5">
+          <button
+            type="button"
+            onClick={() => setIsSidebarCollapsed((c) => !c)}
+            className={cn(
+              "flex items-center justify-center w-full rounded-lg py-2 text-muted-foreground hover:bg-white/5 hover:text-foreground transition-colors",
+              isSidebarCollapsed ? "px-0" : "gap-1.5 px-2"
+            )}
+            aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isSidebarCollapsed ? <PanelLeftOpen className="w-5 h-5" /> : <><PanelLeftClose className="w-5 h-5" /> <span className="text-sm font-medium">Collapse</span></>}
+          </button>
         </div>
       </aside>
 
@@ -136,12 +158,12 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:pl-72 pt-16 lg:pt-0 min-h-screen relative">
+      <main className={cn("flex-1 pt-16 lg:pt-0 min-h-screen relative transition-[padding] duration-300", isSidebarCollapsed ? MAIN_PL_COLLAPSED : MAIN_PL_EXPANDED)}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px]" />
+          <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-glow-pulse" />
+          <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] animate-glow-pulse" style={{ animationDelay: "1s" }} />
         </div>
-        <div className="relative z-10 p-4 md:p-8 max-w-7xl mx-auto w-full">{children}</div>
+        <div className="relative z-10 p-3 md:p-5 max-w-7xl mx-auto w-full">{children}</div>
       </main>
     </div>
   );

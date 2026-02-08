@@ -1,0 +1,55 @@
+{
+  "id": "187a5743-dc7a-4640-aca6-350d50539105",
+  "title": "PNC Subscription Sentinel",
+  "createdAt": "2026-02-08T01:08:05.493Z",
+  "currentStage": 1,
+  "pdfPath": "uploads/187a5743-dc7a-4640-aca6-350d50539105/PM_Feature_Subscriptions.pdf",
+  "rawDocument": "I. Strategic Identity Feature Name: PNC Subscription Sentinel Product Pillar: Virtual Wallet / Spending Intelligence Target Persona: Professionals and students managing multiple digital subscriptions. The Magic Moment: A proactive alert before an unused or price-increased subscription renews. II. The Problem Space Micron Friction Event: A user realizes they paid for 6 months of a streaming service they barely used. Visibility Gap: Subscription charges are buried among regular transactions with no lifecycle context. Behavioral Hurdle: Users procrastinate cancellation due to uncertainty about renewal dates and penalties. Existing Workarounds: Spreadsheet tracking, calendar reminders, or third-party apps outside the bank. Cost of Inaction: Silent monthly leakage erodes trust and increases churn among digitally savvy users. III. Strategic Constraints & Inputs Data Inputs: Recurring transaction detection using merchant category codes and pattern recognition. Policy Guardrails: Must comply with Reg E—no automatic cancellation without user consent. Do-Not-Touch Rule: No direct subscription cancellation; only guide and notify the user.",
+  "summary": "The document outlines a subscription management intelligence feature for PNC Virtual Wallet that alerts users before renewals, offers transparency into recurring charges, and provides guidance for managing or canceling subscriptions. The product targets professionals and students overwhelmed by digital subscriptions, focusing on reducing financial leakage and improving trust through proactive insights while adhering to regulatory constraints.",
+  "stage1Analysis": {
+    "productIdeas": [
+      "Proactive alerts for upcoming subscription renewals, price increases, or unused services",
+      "Lifecycle visibility for recurring transactions using pattern recognition and merchant data",
+      "User guidance on cancellation steps without directly canceling subscriptions",
+      "Spending intelligence insights showing historical usage and value trends"
+    ],
+    "marketSizing": {
+      "totalAddressableMarket": "U.S. consumers with digital subscriptions (~190M+ adults with ~6–8 subscriptions each)",
+      "serviceableMarket": "PNC Virtual Wallet users who manage recurring digital expenses",
+      "opportunityEstimate": "High engagement and retention impact due to broad subscription management pain points"
+    },
+    "customerSegments": [
+      "Young professionals managing multiple streaming, SaaS, and lifestyle subscriptions",
+      "College students with fluctuating budgets and high subscription churn",
+      "Budget-conscious users seeking to avoid accidental charges",
+      "Digitally savvy customers demanding clearer financial visibility"
+    ],
+    "businessGoals": [
+      "Increase customer retention by reducing frustration from unnoticed subscription charges",
+      "Enhance Virtual Wallet differentiation with advanced spending intelligence",
+      "Strengthen customer trust through transparency and proactive financial guidance",
+      "Drive daily/weekly app engagement via intelligent alerts and insights"
+    ],
+    "scenarios": [
+      "User receives an alert that a rarely used subscription will renew in 3 days with a price increase",
+      "User explores a list of all active recurring payments with renewal dates and spending trends",
+      "User is guided through cancellation steps after the system identifies low usage",
+      "User discovers multiple forgotten subscriptions and decides to consolidate or downgrade services"
+    ],
+    "customerNeeds": [
+      "Clear visibility into all recurring charges",
+      "Early warning before unwanted or surprise renewals occur",
+      "Confidence in understanding price changes and billing cycles",
+      "Help managing subscription overload without switching apps",
+      "Reduced financial leakage from unused or forgotten services"
+    ],
+    "competitiveInsights": "Fintech competitors and third-party apps offer subscription tracking but lack integration with a user's primary banking data. PNC can differentiate through native financial insights, higher data accuracy, trusted alerts, and seamless user workflows without requiring external tools."
+  },
+  "metricsCharts": {
+    "stage1": [
+      "stage1-market-sizing.png",
+      "stage1-customer-segments.png",
+      "stage1-scenarios.png"
+    ]
+  }
+}

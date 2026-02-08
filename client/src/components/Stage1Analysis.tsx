@@ -1,47 +1,18 @@
 import { useState } from 'react';
 import type { Project, Stage1Analysis as Stage1AnalysisType } from '../types/project';
-import { getMetricsChartUrl } from '../services/api';
+import { MetricsChartFigure } from './MetricsChartFigure';
+import {
+  ContentSection,
+  ListBlock,
+  InsightCard,
+  MarketSizingBlock,
+} from './content-blocks';
+import { Lightbulb, BarChart3, Users, Target, GitBranch, Heart, Swords, LineChart } from 'lucide-react';
 
 interface Stage1AnalysisProps {
   project: Project;
   onSave: (data: { title: string; stage1Analysis: Stage1AnalysisType }) => Promise<void>;
   onBrainstorm: (additionalContext?: string) => Promise<void>;
-}
-
-function Section({
-  title,
-  children,
-  defaultOpen = true,
-}: {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-white/5 text-left font-medium text-foreground hover:bg-white/10"
-      >
-        {title}
-        <span className="text-muted-foreground">{open ? '▼' : '▶'}</span>
-      </button>
-      {open && <div className="p-4 bg-card/30 border-t border-white/10">{children}</div>}
-    </div>
-  );
-}
-
-function ListItems({ items }: { items: string[] }) {
-  if (!items?.length) return <p className="text-muted-foreground text-sm">None identified.</p>;
-  return (
-    <ul className="list-disc list-inside space-y-1 text-foreground">
-      {items.map((item, i) => (
-        <li key={i}>{item}</li>
-      ))}
-    </ul>
-  );
 }
 
 export function Stage1Analysis({ project, onSave, onBrainstorm }: Stage1AnalysisProps) {
@@ -73,64 +44,58 @@ export function Stage1Analysis({ project, onSave, onBrainstorm }: Stage1Analysis
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Project title</label>
+    <div className="space-y-4">
+      <div className="rounded-xl border border-white/10 bg-card/30 p-4">
+        <label className="block text-sm font-medium text-foreground mb-2">Project title</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          className="w-full rounded-lg border border-white/10 bg-background/80 px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
           placeholder="Enter project title"
         />
       </div>
 
       {analysis && (
         <>
-          <Section title="Product ideas & concepts">
-            <ListItems items={analysis.productIdeas} />
-          </Section>
-          <Section title="Market sizing">
+          <ContentSection title="Product ideas & concepts" icon={Lightbulb}>
+            <ListBlock items={analysis.productIdeas} />
+          </ContentSection>
+          <ContentSection title="Market sizing" icon={BarChart3}>
             {analysis.marketSizing && Object.keys(analysis.marketSizing).length > 0 ? (
-              <pre className="text-sm text-foreground whitespace-pre-wrap">
-                {JSON.stringify(analysis.marketSizing, null, 2)}
-              </pre>
+              <MarketSizingBlock data={analysis.marketSizing as Record<string, unknown>} />
             ) : (
               <p className="text-muted-foreground text-sm">No structured data.</p>
             )}
-          </Section>
-          <Section title="Customer segments">
-            <ListItems items={analysis.customerSegments} />
-          </Section>
-          <Section title="Business goals">
-            <ListItems items={analysis.businessGoals} />
-          </Section>
-          <Section title="Scenario planning">
-            <ListItems items={analysis.scenarios} />
-          </Section>
-          <Section title="Customer needs">
-            <ListItems items={analysis.customerNeeds} />
-          </Section>
-          <Section title="Competitive insights">
-            <p className="text-foreground whitespace-pre-wrap">
-              {analysis.competitiveInsights || 'None.'}
-            </p>
-          </Section>
+          </ContentSection>
+          <ContentSection title="Customer segments" icon={Users}>
+            <ListBlock items={analysis.customerSegments} />
+          </ContentSection>
+          <ContentSection title="Business goals" icon={Target}>
+            <ListBlock items={analysis.businessGoals} />
+          </ContentSection>
+          <ContentSection title="Scenario planning" icon={GitBranch}>
+            <ListBlock items={analysis.scenarios} />
+          </ContentSection>
+          <ContentSection title="Customer needs" icon={Heart}>
+            <ListBlock items={analysis.customerNeeds} />
+          </ContentSection>
+          <ContentSection title="Competitive insights" icon={Swords}>
+            <InsightCard variant="primary">
+              <p className="text-foreground text-sm whitespace-pre-wrap leading-relaxed">
+                {analysis.competitiveInsights || 'None.'}
+              </p>
+            </InsightCard>
+          </ContentSection>
           {project.metricsCharts?.stage1?.length ? (
-            <Section title="Market & strategy metrics">
+            <ContentSection title="Market & strategy metrics" icon={LineChart}>
               <p className="text-muted-foreground text-sm mb-3">Charts from market sizing and scenario analysis.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
                 {project.metricsCharts.stage1.map((filename) => (
-                  <figure key={filename} className="rounded-lg border border-white/10 overflow-hidden bg-card/40">
-                    <img
-                      src={getMetricsChartUrl(project.id, filename)}
-                      alt={filename.replace('.png', '').replace(/-/g, ' ')}
-                      className="w-full h-auto"
-                    />
-                  </figure>
+                  <MetricsChartFigure key={filename} projectId={project.id} filename={filename} />
                 ))}
               </div>
-            </Section>
+            </ContentSection>
           ) : null}
         </>
       )}
@@ -164,7 +129,7 @@ export function Stage1Analysis({ project, onSave, onBrainstorm }: Stage1Analysis
       </div>
 
       {project.rawDocument && (
-        <Section title="Original document content" defaultOpen={false}>
+        <ContentSection title="Original document content" defaultOpen={false}>
           <button
             type="button"
             onClick={() => setRawExpanded(!rawExpanded)}
@@ -173,11 +138,11 @@ export function Stage1Analysis({ project, onSave, onBrainstorm }: Stage1Analysis
             {rawExpanded ? 'Collapse' : 'Expand'} full text
           </button>
           {rawExpanded && (
-            <pre className="text-xs text-muted-foreground whitespace-pre-wrap max-h-96 overflow-auto bg-white/5 p-3 rounded border border-white/10">
+            <pre className="text-xs text-muted-foreground whitespace-pre-wrap max-h-96 overflow-auto bg-white/5 p-3 rounded-lg border border-white/10 font-mono">
               {project.rawDocument}
             </pre>
           )}
-        </Section>
+        </ContentSection>
       )}
     </div>
   );
